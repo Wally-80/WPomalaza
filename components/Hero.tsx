@@ -1,28 +1,53 @@
+'use client'
+
+import { useLanguage } from '@/context/LanguageContext'
+
 export default function Hero() {
+  const { t } = useLanguage()
+  
   return (
-    <section id="hero" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 pt-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6">
-          Hola, soy <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">WPomalaza</span>
-        </h1>
-        <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
-          Desarrollador Full Stack apasionado por crear experiencias web modernas y eficientes
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a
-            href="#projects"
-            className="px-8 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
-          >
-            Ver Proyectos
-          </a>
-          <a
-            href="#contact"
-            className="px-8 py-3 bg-white text-gray-900 border-2 border-gray-900 rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            Contactar
-          </a>
+    <section id="hero" className="min-h-screen flex items-center relative overflow-hidden">
+      {/* Background Image with Overlay */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/95 to-gray-900/80 z-10" />
+        <div 
+          className="w-full h-full bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070')`,
+          }}
+        />
+      </div>
+
+      {/* Content */}
+      <div className="relative z-20 w-full px-6 lg:px-12">
+        <div className="max-w-3xl">
+          <p className="text-xl md:text-2xl text-gray-400 mb-2">{t.hero.greeting}</p>
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+            {t.hero.title}
+          </h1>
+          <p className="text-2xl md:text-3xl text-gray-300 mb-8">
+            {t.hero.subtitle}
+          </p>
+          <div className="flex flex-wrap gap-4">
+            <a
+              href="#projects"
+              className="px-8 py-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all transform hover:scale-105 shadow-lg"
+            >
+              {t.hero.cta.primary}
+            </a>
+            <a
+              href="#contact"
+              className="px-8 py-4 bg-transparent border-2 border-white text-white rounded-lg hover:bg-white hover:text-gray-900 transition-all transform hover:scale-105"
+            >
+              {t.hero.cta.secondary}
+            </a>
+          </div>
         </div>
       </div>
+
+      {/* Decorative Elements */}
+      <div className="absolute bottom-10 right-10 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl z-0" />
+      <div className="absolute top-20 right-20 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl z-0" />
     </section>
   )
 }
