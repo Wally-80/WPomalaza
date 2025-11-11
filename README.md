@@ -1,36 +1,184 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# WPomalaza - Portafolio Profesional PWA
 
-## Getting Started
+Portafolio moderno y ligero construido con Next.js, TypeScript, Tailwind CSS y Supabase. Incluye funcionalidades de Progressive Web App (PWA) para una experiencia de usuario optimizada.
 
-First, run the development server:
+## 🚀 Características
+
+- ✨ **Progressive Web App (PWA)** - Instalable en cualquier dispositivo
+- 🎨 **Diseño Responsivo** - Funciona perfectamente en móviles, tablets y desktop
+- ⚡ **Next.js 16** - Framework React moderno con App Router
+- 🎯 **TypeScript** - Tipado estático para mayor seguridad
+- 💅 **Tailwind CSS** - Estilos modernos y personalizables
+- 🗄️ **Supabase** - Base de datos PostgreSQL y almacenamiento de imágenes
+- 📱 **SEO Optimizado** - Metadatos configurados para mejor posicionamiento
+
+## 📁 Estructura del Proyecto
+
+```
+wpomalaza/
+├── app/                      # App Router de Next.js
+│   ├── layout.tsx           # Layout principal con metadata
+│   ├── page.tsx             # Página principal
+│   └── globals.css          # Estilos globales
+├── components/              # Componentes React
+│   ├── Navbar.tsx          # Barra de navegación
+│   ├── Hero.tsx            # Sección hero
+│   ├── Projects.tsx        # Sección de proyectos
+│   ├── About.tsx           # Sección sobre mí
+│   ├── Contact.tsx         # Formulario de contacto
+│   └── Footer.tsx          # Pie de página
+├── config/                  # Configuraciones
+│   └── site.ts             # Configuración del sitio
+├── hooks/                   # Custom React Hooks
+│   ├── useMediaQuery.ts    # Hook para responsive design
+│   └── useImageUpload.ts   # Hook para subir imágenes
+├── lib/                     # Librerías y utilidades
+│   ├── supabase/           # Configuración de Supabase
+│   │   ├── client.ts       # Cliente de Supabase
+│   │   ├── storage.ts      # Funciones de almacenamiento
+│   │   └── database.types.ts # Tipos de base de datos
+│   └── utils.ts            # Funciones utilitarias
+├── public/                  # Archivos estáticos
+│   ├── manifest.json       # Manifiesto PWA
+│   └── icons/              # Iconos de la PWA (crear esta carpeta)
+├── .env.local              # Variables de entorno (no en Git)
+├── next.config.ts          # Configuración de Next.js
+└── package.json            # Dependencias del proyecto
+```
+
+## 🛠️ Instalación
+
+1. **Clona el repositorio:**
+```bash
+git clone https://github.com/Wally-80/WPomalaza.git
+cd WPomalaza/wpomalaza
+```
+
+2. **Instala las dependencias:**
+```bash
+npm install
+```
+
+3. **Configura las variables de entorno:**
+
+El archivo `.env.local` ya está configurado con tus credenciales de Supabase. Si necesitas cambiarlas:
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://qzcjiswshnawchksudqo.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_api_key
+```
+
+4. **Configura Supabase:**
+
+Sigue las instrucciones en `SUPABASE_SETUP.md` para crear las tablas necesarias.
+
+5. **Genera iconos para la PWA:**
+
+Crea una carpeta `public/icons/` y genera iconos en los siguientes tamaños:
+- 72x72, 96x96, 128x128, 144x144, 152x152, 192x192, 384x384, 512x512
+- También crea versiones maskable: 192x192 y 512x512
+
+Puedes usar herramientas como [PWA Asset Generator](https://www.pwabuilder.com/imageGenerator).
+
+## 🚀 Desarrollo
+
+Inicia el servidor de desarrollo:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📦 Construcción para Producción
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## 🗄️ Configuración de Supabase
 
-To learn more about Next.js, take a look at the following resources:
+### Estructura de Datos
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+El proyecto maneja:
+- **Proyectos**: Portafolio de trabajo
+- **Experiencias**: Historial laboral
+- **Habilidades**: Tecnologías y herramientas
+- **Contactos**: Mensajes de visitantes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Ver `SUPABASE_SETUP.md` para instrucciones detalladas.
 
-## Deploy on Vercel
+### Almacenamiento de Imágenes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Para subir imágenes a Supabase Storage:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```typescript
+import { uploadImage } from '@/lib/supabase/storage'
+
+const { url, error } = await uploadImage('portfolio-images', file)
+```
+
+## 🎨 Personalización
+
+### Configuración del Sitio
+
+Edita `config/site.ts` para cambiar:
+- Nombre del sitio
+- Descripción
+- Enlaces sociales
+- Información del autor
+
+### Estilos
+
+Los estilos usan Tailwind CSS. Personaliza en:
+- `tailwind.config.ts` - Configuración de Tailwind
+- `app/globals.css` - Estilos globales
+
+## 📱 Progressive Web App
+
+La aplicación incluye:
+- **Manifest**: Configurado en `public/manifest.json`
+- **Service Worker**: Generado automáticamente por next-pwa
+- **Instalable**: Los usuarios pueden instalar la app
+- **Offline**: Funciona sin conexión una vez cargada
+
+## 🚀 Despliegue
+
+### Vercel (Recomendado)
+
+1. Conecta tu repositorio con Vercel
+2. Configura las variables de entorno
+3. Despliega automáticamente
+
+### Otros Servicios
+
+También funciona en Netlify, Railway, DigitalOcean App Platform, etc.
+
+## 📝 Consejos de Mantenimiento
+
+1. **Organización del Código**
+   - Mantén componentes pequeños y enfocados
+   - Usa TypeScript para prevenir errores
+   - Comenta código complejo
+
+2. **Base de Datos**
+   - Usa migraciones para cambios
+   - Mantén backups regulares
+   - Implementa RLS para seguridad
+
+3. **Performance**
+   - Optimiza imágenes antes de subirlas
+   - Usa Next.js Image para lazy loading
+   - Minimiza dependencias
+
+## 🔗 Enlaces
+
+- [Repositorio GitHub](https://github.com/Wally-80/WPomalaza)
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Supabase Documentation](https://supabase.com/docs)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+
+---
+
+Desarrollado con ❤️ por WPomalaza
+
