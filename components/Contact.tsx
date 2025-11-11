@@ -22,13 +22,13 @@ export default function Contact() {
 
     if (!formData.name || !formData.email || !formData.message) {
       setStatus('error')
-      setErrorMessage('Todos los campos son requeridos')
+      setErrorMessage(t.contact.form.errorRequired)
       return
     }
 
     if (!isValidEmail(formData.email)) {
       setStatus('error')
-      setErrorMessage('Email inválido')
+      setErrorMessage(t.contact.form.errorInvalidEmail)
       return
     }
 
@@ -51,7 +51,7 @@ export default function Contact() {
     } catch (error) {
       console.error('Error sending message:', error)
       setStatus('error')
-      setErrorMessage('Error al enviar el mensaje. Por favor, intenta de nuevo.')
+      setErrorMessage(t.contact.form.error)
     }
   }
 
@@ -77,8 +77,8 @@ export default function Contact() {
                 </svg>
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-1">Ubicación</h3>
-                <p className="text-gray-600">Lima, Perú</p>
+                <h3 className="text-lg font-semibold text-gray-900 mb-1">{t.contact.info.location.title}</h3>
+                <p className="text-gray-600">{t.contact.info.location.value}</p>
               </div>
             </div>
 
@@ -89,9 +89,9 @@ export default function Contact() {
                 </svg>
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-1">Email</h3>
-                <a href="mailto:contact@wpomalaza.com" className="text-blue-600 hover:text-blue-700">
-                  contact@wpomalaza.com
+                <h3 className="text-lg font-semibold text-gray-900 mb-1">{t.contact.info.email.title}</h3>
+                <a href={`mailto:${t.contact.info.email.value}`} className="text-blue-600 hover:text-blue-700">
+                  {t.contact.info.email.value}
                 </a>
               </div>
             </div>
@@ -103,14 +103,14 @@ export default function Contact() {
                 </svg>
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-1">Disponibilidad</h3>
-                <p className="text-gray-600">Lun - Vie: 9:00 AM - 6:00 PM</p>
+                <h3 className="text-lg font-semibold text-gray-900 mb-1">{t.contact.info.availability.title}</h3>
+                <p className="text-gray-600">{t.contact.info.availability.value}</p>
               </div>
             </div>
 
             {/* Social Links */}
             <div className="pt-6 border-t border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Sígueme en</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Social</h3>
               <div className="flex space-x-4">
                 <a href="#" className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-blue-500 transition-colors">
                   <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">

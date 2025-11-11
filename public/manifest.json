@@ -1,7 +1,7 @@
 {
-  "name": "WPomalaza",
+  "name": "WPomalaza - Portfolio",
   "short_name": "WPomalaza",
-  "description": "Portafolio profesional moderno y ligero",
+  "description": "Modern and lightweight professional portfolio",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

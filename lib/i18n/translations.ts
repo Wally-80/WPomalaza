@@ -67,6 +67,7 @@ export interface Translations {
     subtitle: string
     viewDemo: string
     viewCode: string
+    noProjects: string
   }
   // Contact Section
   contact: {
@@ -94,6 +95,8 @@ export interface Translations {
       sending: string
       success: string
       error: string
+      errorRequired: string
+      errorInvalidEmail: string
     }
   }
   // Footer
@@ -166,6 +169,7 @@ export const translations: Record<Language, Translations> = {
       subtitle: 'Some of my recent work',
       viewDemo: 'View Demo',
       viewCode: 'View Code',
+      noProjects: 'No projects available yet.',
     },
     contact: {
       title: 'Contact',
@@ -192,6 +196,8 @@ export const translations: Record<Language, Translations> = {
         sending: 'Sending...',
         success: 'Message sent successfully!',
         error: 'Error sending message. Please try again.',
+        errorRequired: 'All fields are required',
+        errorInvalidEmail: 'Invalid email address',
       },
     },
     footer: {
@@ -261,6 +267,7 @@ export const translations: Record<Language, Translations> = {
       subtitle: 'Algunos de mis trabajos recientes',
       viewDemo: 'Ver Demo',
       viewCode: 'Ver Código',
+      noProjects: 'No hay proyectos disponibles aún.',
     },
     contact: {
       title: 'Contacto',
@@ -287,6 +294,8 @@ export const translations: Record<Language, Translations> = {
         sending: 'Enviando...',
         success: '¡Mensaje enviado con éxito!',
         error: 'Error al enviar el mensaje. Por favor intenta de nuevo.',
+        errorRequired: 'Todos los campos son requeridos',
+        errorInvalidEmail: 'Correo electrónico inválido',
       },
     },
     footer: {

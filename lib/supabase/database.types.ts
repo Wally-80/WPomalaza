@@ -6,8 +6,6 @@ export interface Project {
   title: string
   description: string
   image_url: string
-  technologies: string[]
-  github_url?: string
   live_url?: string
   featured: boolean
   created_at: string

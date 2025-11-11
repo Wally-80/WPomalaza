@@ -58,8 +58,7 @@ export default function Projects() {
         
         {projects.length === 0 ? (
           <div className="text-center py-12 bg-gray-50 rounded-lg">
-            <p className="text-gray-600 text-lg mb-2">No hay proyectos disponibles aún.</p>
-            <p className="text-sm text-gray-500">Agrega proyectos desde tu base de datos de Supabase.</p>
+            <p className="text-gray-600 text-lg mb-2">{t.projects.noProjects}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
