@@ -4,8 +4,16 @@ import withPWA from 'next-pwa';
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    domains: ['qzcjiswshnawchksudqo.supabase.co'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'qzcjiswshnawchksudqo.supabase.co',
+        pathname: '/storage/v1/object/public/**',
+      },
+    ],
   },
+  // Configuración vacía de Turbopack para silenciar el warning
+  turbopack: {},
 };
 
 export default withPWA({
