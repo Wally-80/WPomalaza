@@ -10,6 +10,10 @@ const nextConfig: NextConfig = {
         hostname: 'qzcjiswshnawchksudqo.supabase.co',
         pathname: '/storage/v1/object/public/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
     ],
   },
   // Configuración vacía de Turbopack para silenciar el warning
