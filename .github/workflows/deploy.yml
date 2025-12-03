@@ -24,6 +24,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Create .env.local file
+        run: |
+          echo "NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" > .env.local
+          echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" >> .env.local
+
       - name: Build application
         run: npm run build
         env:
@@ -37,7 +42,7 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
-          source: ".next,public,package.json,package-lock.json,next.config.ts"
+          source: ".next,public,package.json,package-lock.json,next.config.ts,.env.local"
           target: ${{ secrets.VPS_TARGET_PATH }}
 
       - name: Execute deployment commands
