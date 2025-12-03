@@ -13,22 +13,18 @@ export default function Contact() {
     message: ''
   })
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
-  const [errorMessage, setErrorMessage] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setStatus('loading')
-    setErrorMessage('')
 
     if (!formData.name || !formData.email || !formData.message) {
       setStatus('error')
-      setErrorMessage(t.contact.form.errorRequired)
       return
     }
 
     if (!isValidEmail(formData.email)) {
       setStatus('error')
-      setErrorMessage(t.contact.form.errorInvalidEmail)
       return
     }
 
@@ -51,7 +47,6 @@ export default function Contact() {
     } catch (error) {
       console.error('Error sending message:', error)
       setStatus('error')
-      setErrorMessage(t.contact.form.error)
     }
   }
 

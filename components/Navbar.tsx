@@ -1,8 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
-import { navItems, siteConfig } from '@/config/site'
+import { siteConfig } from '@/config/site'
 import { useLanguage } from '@/context/LanguageContext'
 import LanguageSwitcher from './LanguageSwitcher'
 
