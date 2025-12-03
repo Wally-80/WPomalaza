@@ -43,7 +43,7 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
           script: |
-            mkdir -p ${{ secrets.VPS_TARGET_PATH }}
+            mkdir -p ~/wpomalaza
 
       - name: Deploy to Hostinger VPS
         uses: appleboy/scp-action@master
@@ -53,7 +53,7 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
           source: ".next,public,package.json,package-lock.json,next.config.ts,.env.local"
-          target: ${{ secrets.VPS_TARGET_PATH }}
+          target: "~/wpomalaza"
 
       - name: Execute deployment commands
         uses: appleboy/ssh-action@master
@@ -63,7 +63,7 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
           script: |
-            cd ${{ secrets.VPS_TARGET_PATH }}
+            cd ~/wpomalaza
             npm install --production
             pm2 restart wpomalaza || pm2 start npm --name "wpomalaza" -- start
             pm2 save
