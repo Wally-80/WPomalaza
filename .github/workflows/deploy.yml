@@ -63,6 +63,8 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
           script: |
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             cd ~/wpomalaza
             npm install --production
             pm2 restart wpomalaza || pm2 start npm --name "wpomalaza" -- start
