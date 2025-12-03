@@ -118,7 +118,7 @@ export const translations: Record<Language, Translations> = {
     hero: {
       greeting: 'Hello, I\'m',
       title: 'Walter Pomalaza',
-      subtitle: 'I\'m Full Stack Developer',
+      subtitle: 'Developer',
       cta: {
         primary: 'View Projects',
         secondary: 'Contact Me',
@@ -216,7 +216,7 @@ export const translations: Record<Language, Translations> = {
     hero: {
       greeting: 'Hola, soy',
       title: 'Walter Pomalaza',
-      subtitle: 'Soy Desarrollador Full Stack',
+      subtitle: 'Soy Desarrollador Frontend and Backend',
       cta: {
         primary: 'Ver Proyectos',
         secondary: 'Contáctame',
