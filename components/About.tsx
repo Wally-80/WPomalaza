@@ -23,21 +23,6 @@ export default function About() {
             <p className="text-lg text-gray-700 mb-6 leading-relaxed">
               {t.about.description}
             </p>
-            
-            <div className="flex flex-wrap gap-4 mt-6">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-500">3+</div>
-                <div className="text-sm text-gray-600">{t.about.stats.experience}</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-500">50+</div>
-                <div className="text-sm text-gray-600">{t.about.stats.projects}</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-500">30+</div>
-                <div className="text-sm text-gray-600">{t.about.stats.clients}</div>
-              </div>
-            </div>
           </div>
 
           <div>
