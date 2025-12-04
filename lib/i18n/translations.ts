@@ -126,7 +126,7 @@ export const translations: Record<Language, Translations> = {
     },
     about: {
       title: 'About Me',
-      description: 'I\'m a passionate Full Stack Developer with experience in building modern and scalable web applications. I specialize in React, Next.js, Node.js, and cloud technologies.',
+      description: 'I\'m a passionate Developer with experience in building modern and scalable web applications. I specialize in React, Next.js, Node.js, and cloud technologies.',
       stats: {
         experience: 'Years Experience',
         projects: 'Projects Completed',

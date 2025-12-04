@@ -49,7 +49,7 @@ export default function Sidebar() {
               </div>
             </div>
             <h2 className="text-xl font-bold text-center">WPomalaza</h2>
-            <p className="text-gray-400 text-sm mt-1">Full Stack Developer</p>
+            <p className="text-gray-400 text-sm mt-1">Developer</p>
           </div>
 
           {/* Navigation */}
