@@ -23,8 +23,8 @@ export const metadata: Metadata = {
     title: "WPomalaza",
   },
   icons: {
-    icon: "/icons/icon-192x192.png",
-    apple: "/icons/icon-192x192.png",
+    icon: "/icon.svg",
+    apple: "/icon.svg",
   },
 };
 

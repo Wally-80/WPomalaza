@@ -18,18 +18,24 @@ export default function Contact() {
     e.preventDefault()
     setStatus('loading')
 
+    // Validate form fields
     if (!formData.name || !formData.email || !formData.message) {
+      console.error('Validation failed: Missing required fields')
       setStatus('error')
+      setTimeout(() => setStatus('idle'), 3000)
       return
     }
 
     if (!isValidEmail(formData.email)) {
+      console.error('Validation failed: Invalid email format')
       setStatus('error')
+      setTimeout(() => setStatus('idle'), 3000)
       return
     }
 
     try {
-      const { error } = await supabase
+      console.log('Attempting to insert contact message...')
+      const { data, error } = await supabase
         .from('contacts')
         .insert([
           {
@@ -39,14 +45,25 @@ export default function Contact() {
             read: false
           }
         ])
+        .select()
 
-      if (error) throw error
+      if (error) {
+        console.error('Supabase error:', error)
+        throw error
+      }
 
+      console.log('Message sent successfully:', data)
       setStatus('success')
       setFormData({ name: '', email: '', message: '' })
+
+      // Reset success message after 5 seconds
+      setTimeout(() => setStatus('idle'), 5000)
     } catch (error) {
       console.error('Error sending message:', error)
       setStatus('error')
+
+      // Reset error message after 5 seconds
+      setTimeout(() => setStatus('idle'), 5000)
     }
   }
 
@@ -133,7 +150,7 @@ export default function Contact() {
                   id="name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                   placeholder={t.contact.form.name}
                   disabled={status === 'loading'}
                 />
@@ -148,7 +165,7 @@ export default function Contact() {
                   id="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                   placeholder={t.contact.form.email}
                   disabled={status === 'loading'}
                 />
@@ -163,7 +180,7 @@ export default function Contact() {
                   rows={5}
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-gray-900"
                   placeholder={t.contact.form.message}
                   disabled={status === 'loading'}
                 />
