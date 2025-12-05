@@ -44,6 +44,8 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             mkdir -p ~/wpomalaza
+            # Stop PM2 process before deleting files to prevent serving old assets
+            pm2 stop wpomalaza || true
             rm -rf ~/wpomalaza/.next
             rm -rf ~/wpomalaza/public
 
@@ -54,8 +56,9 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
-          source: ".next,public,package.json,package-lock.json,next.config.ts,.env.local"
+          source: ".next/standalone,.next/static,.env.local,public"
           target: "~/wpomalaza"
+          strip_components: 0
 
       - name: Execute deployment commands
         uses: appleboy/ssh-action@master
@@ -68,6 +71,17 @@ jobs:
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             cd ~/wpomalaza
-            npm install --production
-            pm2 restart wpomalaza || pm2 start npm --name "wpomalaza" -- start
+
+            # Copy static files and public folder to standalone structure
+            mkdir -p .next/standalone/.next
+            cp -r .next/static .next/standalone/.next/
+            cp -r public .next/standalone/
+
+            # Delete old PM2 process completely
+            pm2 delete wpomalaza || true
+
+            # Start the standalone server with environment variables
+            cd .next/standalone
+            pm2 start node --name "wpomalaza" -- server.js
             pm2 save
+            pm2 status
