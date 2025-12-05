@@ -43,6 +43,23 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
           script: |
+            # One-time migration: Clean up old deployment structure if it exists
+            if [ -d ~/wpomalaza/.next ] && [ ! -L ~/wpomalaza/.next ]; then
+              echo "Migrating from old deployment structure..."
+              pm2 stop wpomalaza || true
+              pm2 delete wpomalaza || true
+
+              # Backup old files
+              BACKUP_DIR=~/wpomalaza_backup_$(date +%Y%m%d_%H%M%S)
+              mkdir -p "$BACKUP_DIR"
+              [ -d ~/wpomalaza/.next ] && mv ~/wpomalaza/.next "$BACKUP_DIR/" 2>/dev/null || true
+              [ -d ~/wpomalaza/public ] && mv ~/wpomalaza/public "$BACKUP_DIR/" 2>/dev/null || true
+              [ -d ~/wpomalaza/node_modules ] && rm -rf ~/wpomalaza/node_modules
+              [ -f ~/wpomalaza/package.json ] && mv ~/wpomalaza/package.json "$BACKUP_DIR/" 2>/dev/null || true
+
+              echo "Old deployment backed up to: $BACKUP_DIR"
+            fi
+
             mkdir -p ~/wpomalaza
             # Create a new release directory with timestamp
             RELEASE_DIR=~/wpomalaza/releases/$(date +%Y%m%d_%H%M%S)
