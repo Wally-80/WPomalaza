@@ -58,7 +58,7 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
-          source: ".next/standalone,.next/static,public,.env.local"
+          source: ".next/standalone,.next/static,public,.env.local,nginx.conf"
           target: "~/wpomalaza_deploy"
           strip_components: 0
 
@@ -82,6 +82,16 @@ jobs:
 
             # Start PM2 from standalone directory
             cd .next/standalone
-            pm2 start node --name "wpomalaza" -- server.js
+            PORT=3000 pm2 start node --name "wpomalaza" -- server.js
             pm2 save
             pm2 list
+
+            # Check if we need to configure Nginx
+            echo ""
+            echo "=== Checking Nginx configuration ==="
+            if command -v nginx &> /dev/null; then
+              echo "Nginx detected. Please ensure Nginx is configured to proxy to localhost:3000"
+              echo "Sample config available at: ~/wpomalaza_deploy/nginx.conf"
+            else
+              echo "No Nginx found - application should be accessible on port 3000"
+            fi
