@@ -35,7 +35,7 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
-      - name: Create deployment directory on VPS
+      - name: Prepare deployment directory on VPS
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -44,6 +44,8 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             mkdir -p ~/wpomalaza
+            rm -rf ~/wpomalaza/.next
+            rm -rf ~/wpomalaza/public
 
       - name: Deploy to Hostinger VPS
         uses: appleboy/scp-action@master
