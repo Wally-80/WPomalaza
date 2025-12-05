@@ -44,10 +44,13 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             mkdir -p ~/wpomalaza
-            # Stop PM2 process before deleting files to prevent serving old assets
-            pm2 stop wpomalaza || true
-            rm -rf ~/wpomalaza/.next
-            rm -rf ~/wpomalaza/public
+            # Create a new release directory with timestamp
+            RELEASE_DIR=~/wpomalaza/releases/$(date +%Y%m%d_%H%M%S)
+            mkdir -p $RELEASE_DIR
+
+      - name: Get release directory
+        id: release_dir
+        run: echo "dir=releases/$(date +%Y%m%d_%H%M%S)" >> $GITHUB_OUTPUT
 
       - name: Deploy to Hostinger VPS
         uses: appleboy/scp-action@master
@@ -56,12 +59,14 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
-          source: ".next/standalone,.next/static,.env.local,public"
-          target: "~/wpomalaza"
+          source: ".next/standalone,.next/static,.env.local,public,ecosystem.config.js"
+          target: "~/wpomalaza/${{ steps.release_dir.outputs.dir }}"
           strip_components: 0
 
       - name: Execute deployment commands
         uses: appleboy/ssh-action@master
+        env:
+          RELEASE_DIR: ${{ steps.release_dir.outputs.dir }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
@@ -70,18 +75,38 @@ jobs:
           script: |
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            cd ~/wpomalaza
+
+            # Find the latest release directory
+            LATEST_RELEASE=$(ls -td ~/wpomalaza/releases/*/ | head -1)
+            cd "$LATEST_RELEASE"
 
             # Copy static files and public folder to standalone structure
             mkdir -p .next/standalone/.next
             cp -r .next/static .next/standalone/.next/
             cp -r public .next/standalone/
 
-            # Delete old PM2 process completely
-            pm2 delete wpomalaza || true
+            # Update the current symlink to point to new release
+            ln -sfn "$LATEST_RELEASE/.next/standalone" ~/wpomalaza/current
 
-            # Start the standalone server with environment variables
-            cd .next/standalone
-            pm2 start node --name "wpomalaza" -- server.js
+            # Copy ecosystem config to root
+            cp "$LATEST_RELEASE/ecosystem.config.js" ~/wpomalaza/
+
+            # Create logs directory
+            mkdir -p ~/wpomalaza/logs
+
+            # Gracefully reload PM2 with zero downtime using ecosystem file
+            cd ~/wpomalaza
+            if pm2 describe wpomalaza > /dev/null 2>&1; then
+              # Reload existing process (zero downtime)
+              pm2 reload ecosystem.config.js --update-env
+            else
+              # Start new process
+              pm2 start ecosystem.config.js
+            fi
             pm2 save
+
+            # Clean up old releases (keep last 3)
+            cd ~/wpomalaza/releases
+            ls -t | tail -n +4 | xargs -r rm -rf
+
             pm2 status
