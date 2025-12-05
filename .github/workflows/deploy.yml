@@ -35,7 +35,7 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
-      - name: Prepare deployment directory on VPS
+      - name: Clean and prepare VPS
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -43,47 +43,27 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
           script: |
-            # One-time migration: Clean up old deployment structure if it exists
-            if [ -d ~/wpomalaza/.next ] && [ ! -L ~/wpomalaza/.next ]; then
-              echo "Migrating from old deployment structure..."
-              pm2 stop wpomalaza || true
-              pm2 delete wpomalaza || true
+            # Stop PM2 to prevent serving stale files
+            pm2 stop wpomalaza || true
+            pm2 delete wpomalaza || true
 
-              # Backup old files
-              BACKUP_DIR=~/wpomalaza_backup_$(date +%Y%m%d_%H%M%S)
-              mkdir -p "$BACKUP_DIR"
-              [ -d ~/wpomalaza/.next ] && mv ~/wpomalaza/.next "$BACKUP_DIR/" 2>/dev/null || true
-              [ -d ~/wpomalaza/public ] && mv ~/wpomalaza/public "$BACKUP_DIR/" 2>/dev/null || true
-              [ -d ~/wpomalaza/node_modules ] && rm -rf ~/wpomalaza/node_modules
-              [ -f ~/wpomalaza/package.json ] && mv ~/wpomalaza/package.json "$BACKUP_DIR/" 2>/dev/null || true
+            # Clean old deployment completely
+            rm -rf ~/wpomalaza_deploy
+            mkdir -p ~/wpomalaza_deploy
 
-              echo "Old deployment backed up to: $BACKUP_DIR"
-            fi
-
-            mkdir -p ~/wpomalaza
-            # Create a new release directory with timestamp
-            RELEASE_DIR=~/wpomalaza/releases/$(date +%Y%m%d_%H%M%S)
-            mkdir -p $RELEASE_DIR
-
-      - name: Get release directory
-        id: release_dir
-        run: echo "dir=releases/$(date +%Y%m%d_%H%M%S)" >> $GITHUB_OUTPUT
-
-      - name: Deploy to Hostinger VPS
+      - name: Deploy files to VPS
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
-          source: ".next/standalone,.next/static,.env.local,public,ecosystem.config.js"
-          target: "~/wpomalaza/${{ steps.release_dir.outputs.dir }}"
+          source: ".next/standalone,.next/static,public,.env.local"
+          target: "~/wpomalaza_deploy"
           strip_components: 0
 
-      - name: Execute deployment commands
+      - name: Setup and start application
         uses: appleboy/ssh-action@master
-        env:
-          RELEASE_DIR: ${{ steps.release_dir.outputs.dir }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
@@ -93,37 +73,15 @@ jobs:
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-            # Find the latest release directory
-            LATEST_RELEASE=$(ls -td ~/wpomalaza/releases/*/ | head -1)
-            cd "$LATEST_RELEASE"
+            cd ~/wpomalaza_deploy
 
-            # Copy static files and public folder to standalone structure
-            mkdir -p .next/standalone/.next
+            # Copy static assets and public folder into standalone
             cp -r .next/static .next/standalone/.next/
             cp -r public .next/standalone/
+            cp .env.local .next/standalone/
 
-            # Update the current symlink to point to new release
-            ln -sfn "$LATEST_RELEASE/.next/standalone" ~/wpomalaza/current
-
-            # Copy ecosystem config to root
-            cp "$LATEST_RELEASE/ecosystem.config.js" ~/wpomalaza/
-
-            # Create logs directory
-            mkdir -p ~/wpomalaza/logs
-
-            # Gracefully reload PM2 with zero downtime using ecosystem file
-            cd ~/wpomalaza
-            if pm2 describe wpomalaza > /dev/null 2>&1; then
-              # Reload existing process (zero downtime)
-              pm2 reload ecosystem.config.js --update-env
-            else
-              # Start new process
-              pm2 start ecosystem.config.js
-            fi
+            # Start PM2 from standalone directory
+            cd .next/standalone
+            pm2 start node --name "wpomalaza" -- server.js
             pm2 save
-
-            # Clean up old releases (keep last 3)
-            cd ~/wpomalaza/releases
-            ls -t | tail -n +4 | xargs -r rm -rf
-
-            pm2 status
+            pm2 list
