@@ -7,7 +7,7 @@ export default function About() {
   
   const skills = [
     'Next.js', 'React', 'TypeScript', 'Tailwind CSS',
-    'Supabase', 'Node.js', 'PostgreSQL', 'Git', 'PWA'
+    'Supabase', 'Node.js', 'PostgreSQL', 'Git', 'PWA', 'Vercel'
   ]
 
   return (
