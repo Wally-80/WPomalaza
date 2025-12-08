@@ -177,7 +177,7 @@ export const translations: Record<Language, Translations> = {
       info: {
         location: {
           title: 'Location',
-          value: 'Lima, Peru',
+          value: 'New Jersey, USA',
         },
         email: {
           title: 'Email',
@@ -275,7 +275,7 @@ export const translations: Record<Language, Translations> = {
       info: {
         location: {
           title: 'Ubicación',
-          value: 'Lima, Perú',
+          value: 'Nueva Jersey, EE.UU.',
         },
         email: {
           title: 'Correo',
