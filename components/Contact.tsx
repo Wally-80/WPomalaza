@@ -53,19 +53,6 @@ export default function Contact() {
       }
 
       console.log('Message sent successfully:', data)
-
-      // Send email notification
-      try {
-        await fetch('/api/send-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData),
-        });
-      } catch (emailError) {
-        console.error('Email notification error:', emailError);
-        // Don't fail the whole submission if email fails
-      }
-
       setStatus('success')
       setFormData({ name: '', email: '', message: '' })
 
