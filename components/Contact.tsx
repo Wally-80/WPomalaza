@@ -53,6 +53,29 @@ export default function Contact() {
       }
 
       console.log('Message sent successfully:', data)
+
+      // Send email notification
+      try {
+        console.log('Calling email API...')
+        const emailResponse = await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        })
+
+        const emailResult = await emailResponse.json()
+        console.log('Email API response:', emailResult)
+
+        if (!emailResponse.ok) {
+          console.error('Email API failed:', emailResult)
+        } else {
+          console.log('Email sent successfully!')
+        }
+      } catch (emailError) {
+        console.error('Email notification error:', emailError)
+        // Don't fail the whole submission if email fails
+      }
+
       setStatus('success')
       setFormData({ name: '', email: '', message: '' })
 
