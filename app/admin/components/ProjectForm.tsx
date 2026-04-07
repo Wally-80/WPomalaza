@@ -155,9 +155,9 @@ export default function ProjectForm({ initialData, onClose, onSuccess }: Project
             <div className="flex items-center gap-6 p-6 md:p-8 bg-emerald-50/50 border-2 border-dashed border-emerald-200 rounded-[2rem] hover:bg-emerald-50 transition-colors">
               <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center text-emerald-500 shadow-sm overflow-hidden flex-shrink-0">
                 {imageFile ? (
-                  <img src={URL.createObjectURL(imageFile)} className="w-full h-full object-cover" />
+                  <img src={URL.createObjectURL(imageFile)} className="w-full h-full object-contain p-1" />
                 ) : formData.image_url ? (
-                  <img src={formData.image_url} className="w-full h-full object-cover" />
+                  <img src={formData.image_url} className="w-full h-full object-contain p-1" />
                 ) : (
                   <ImageIcon className="w-10 h-10" />
                 )}

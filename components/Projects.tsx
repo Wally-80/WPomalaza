@@ -77,32 +77,34 @@ export default function Projects() {
             {projects.map((project) => (
               <div 
                 key={project.id} 
-                className="group relative bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-sm hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-500 transform hover:-translate-y-2"
+                className="group relative bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-sm hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-500 transform hover:-translate-y-2 flex flex-col h-full"
               >
                 {/* Image Section */}
-                <div className="relative h-64 bg-gray-50 overflow-hidden">
+                <div className="relative aspect-video bg-gray-50/80 overflow-hidden flex items-center justify-center">
                   {project.image_url ? (
                     <Image
                       src={project.image_url}
                       alt={project.title}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                      className="object-contain p-4 group-hover:scale-105 transition-all duration-1000 ease-in-out"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-emerald-50 to-blue-50 text-emerald-500 text-7xl font-black italic opacity-20">
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-emerald-50 to-blue-50 text-emerald-500 text-6xl font-black italic opacity-20">
                       {project.title.charAt(0)}
                     </div>
                   )}
-                  {/* Badge */}
-                   <div className="absolute top-6 right-6">
-                     <div className="w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg text-emerald-500">
-                       <Code className="w-5 h-5" />
+                  
+                  {/* Glassy Tag */}
+                   <div className="absolute top-4 right-4">
+                     <div className="w-9 h-9 bg-white/70 backdrop-blur-md rounded-xl flex items-center justify-center shadow-sm text-emerald-600 border border-white/50">
+                       <Code className="w-4 h-4" />
                      </div>
                    </div>
                 </div>
                 
                 {/* Content Section */}
-                <div className="p-8">
+                <div className="p-8 flex-1 flex flex-col">
                   <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-emerald-600 transition-colors">
                     {project.title}
                   </h3>
@@ -128,7 +130,7 @@ export default function Projects() {
                   </div>
                   
                   {/* Footer links */}
-                  <div className="flex items-center gap-4 pt-6 border-t border-gray-50">
+                  <div className="mt-auto flex items-center gap-4 pt-6 border-t border-gray-50">
                     {project.github_url && (
                       <a
                         href={project.github_url}

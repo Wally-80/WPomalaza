@@ -185,11 +185,16 @@ export default function AdminDashboard() {
               <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-10">
                 {projects.map((project) => (
                   <div key={project.id} className="group h-full bg-white rounded-[3rem] border border-gray-100 hover:border-emerald-100 overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-emerald-500/5 transition-all duration-700 flex flex-col">
-                    <div className="relative h-64 bg-gray-50 overflow-hidden">
+                    <div className="relative aspect-video bg-gray-50/80 overflow-hidden flex items-center justify-center">
                       {project.image_url ? (
-                        <Image src={project.image_url} alt={project.title} fill className="object-cover group-hover:scale-110 transition-transform duration-1000 ease-out" />
+                        <Image 
+                          src={project.image_url} 
+                          alt={project.title} 
+                          fill 
+                          className="object-contain p-4 group-hover:scale-105 transition-all duration-1000 ease-in-out" 
+                        />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-100 italic font-black text-8xl opacity-20">WP</div>
+                        <div className="w-full h-full flex items-center justify-center text-gray-100 italic font-black text-6xl opacity-20">WP</div>
                       )}
                       
                       {/* Floating Actions */}

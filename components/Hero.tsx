@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { db } from '@/lib/firebase/client'
 import { doc, onSnapshot } from 'firebase/firestore'
 import { useLanguage } from '@/context/LanguageContext'
-import { ArrowRight, Smartphone, Globe, Code, Sparkles } from 'lucide-react'
+import { ArrowRight, Sparkles } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -13,8 +13,7 @@ export default function Hero() {
   const [settings, setSettings] = useState({
     name: 'Walter Pomalaza',
     title: 'React, Next.js & Node.js Developer',
-    profile_image_url: '',
-    badge_text: 'Clean Designs'
+    profile_image_url: ''
   })
 
   useEffect(() => {
@@ -80,18 +79,7 @@ export default function Hero() {
                   )}
                 </div>
                 
-                {/* Achievement Badge */}
-                <div className="absolute -bottom-6 -right-6 md:bottom-10 md:-right-10 bg-white p-6 md:p-8 rounded-[2rem] shadow-2xl border border-gray-50 animate-bounce duration-[4000ms]">
-                   <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center">
-                         <Code className="w-6 h-6 text-emerald-500" />
-                      </div>
-                      <div>
-                         <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest leading-none mb-1">Passionate about</p>
-                         <p className="text-lg font-black text-gray-900 leading-none">{settings.badge_text || 'Clean Designs'}</p>
-                      </div>
-                   </div>
-                </div>
+
              </div>
           </div>
         </div>

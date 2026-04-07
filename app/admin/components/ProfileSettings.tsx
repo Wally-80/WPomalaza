@@ -7,7 +7,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { 
   Save, User, Globe, Github, Linkedin, Twitter, 
   Image as ImageIcon, Loader2, CheckCircle2, AlertCircle,
-  Plus, X, Briefcase, FileText, Sparkles
+  Plus, FileText
 } from 'lucide-react'
 
 export default function ProfileSettings() {
@@ -15,7 +15,6 @@ export default function ProfileSettings() {
     name: 'Walter Pomalaza',
     title: 'React, Next.js & Node.js Developer',
     bio: '',
-    badge_text: 'Clean Designs',
     profile_image_url: '',
     socials: {
       github: '',
@@ -167,19 +166,7 @@ export default function ProfileSettings() {
                  placeholder="e.g. Senior Full-Stack Developer"
                />
              </div>
-             <div className="space-y-1">
-               <label className="text-xs font-black text-gray-400 uppercase tracking-widest pl-1">Passion Badge (Hero Section)</label>
-               <div className="relative">
-                 <Sparkles className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500" />
-                 <input 
-                   type="text" 
-                   value={formData.badge_text}
-                   onChange={(e) => setFormData({...formData, badge_text: e.target.value})}
-                   className="w-full text-sm font-bold text-gray-900 pl-10 pr-4 py-2 bg-emerald-50/30 rounded-xl border-none focus:ring-1 focus:ring-emerald-500 placeholder:text-gray-200"
-                   placeholder="e.g. Clean Designs"
-                 />
-               </div>
-             </div>
+
           </div>
         </div>
 
