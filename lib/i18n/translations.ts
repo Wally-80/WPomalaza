@@ -10,15 +10,18 @@ export interface Translations {
     contact: string
   }
   // Hero Section
-  hero: {
-    greeting: string
-    title: string
-    subtitle: string
-    cta: {
-      primary: string
-      secondary: string
+    hero: {
+      welcome: string
+      greeting: string
+      title: string
+      subtitle: string
+      viewProjects: string
+      contactMe: string
+      cta: {
+        primary: string
+        secondary: string
+      }
     }
-  }
   // About Section
   about: {
     title: string
@@ -116,9 +119,12 @@ export const translations: Record<Language, Translations> = {
       contact: 'Contact',
     },
     hero: {
+      welcome: 'Welcome to my world',
       greeting: 'Hello, I\'m',
       title: 'Walter Pomalaza',
       subtitle: 'Developer',
+      viewProjects: 'View Projects',
+      contactMe: 'Contact Me',
       cta: {
         primary: 'View Projects',
         secondary: 'Contact Me',
@@ -202,7 +208,7 @@ export const translations: Record<Language, Translations> = {
     },
     footer: {
       rights: 'All rights reserved',
-      builtWith: 'Built with Next.js & Supabase',
+      builtWith: 'Built with Next.js & Firebase',
     },
   },
   es: {
@@ -214,9 +220,12 @@ export const translations: Record<Language, Translations> = {
       contact: 'Contacto',
     },
     hero: {
+      welcome: 'Bienvenidos a mi mundo',
       greeting: 'Hola, soy',
       title: 'Walter Pomalaza',
       subtitle: 'Soy Desarrollador Frontend and Backend',
+      viewProjects: 'Ver Proyectos',
+      contactMe: 'Contáctame',
       cta: {
         primary: 'Ver Proyectos',
         secondary: 'Contáctame',
@@ -300,7 +309,7 @@ export const translations: Record<Language, Translations> = {
     },
     footer: {
       rights: 'Todos los derechos reservados',
-      builtWith: 'Hecho con Next.js y Supabase',
+      builtWith: 'Hecho con Next.js y Firebase',
     },
   },
 }

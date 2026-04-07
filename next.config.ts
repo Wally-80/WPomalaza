@@ -12,8 +12,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'qzcjiswshnawchksudqo.supabase.co',
-        pathname: '/storage/v1/object/public/**',
+        hostname: 'wpomalaza-3a90e.firebasestorage.app',
+      },
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
       },
       {
         protocol: 'https',
@@ -21,6 +24,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  turbopack: {},
   async headers() {
     return [
       {

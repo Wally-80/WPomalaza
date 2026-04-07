@@ -14,8 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "WPomalaza - Portfolio",
-  description: "Modern and lightweight professional portfolio",
+  metadataBase: new URL("https://wpomalaza.com"),
+  title: "WPomalaza | Professional Portfolio",
+  description: "Modern and lightweight professional portfolio for high-end web development.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -23,12 +24,12 @@ export const metadata: Metadata = {
     title: "WPomalaza",
   },
   icons: {
-    icon: "/icon.svg?v=2",
-    apple: "/icons/icon-192.png?v=2",
+    icon: "/icon.svg?v=3",
+    apple: "/icons/icon-192.png?v=3",
   },
   openGraph: {
-    title: "WPomalaza - Portfolio",
-    description: "Modern and lightweight professional portfolio",
+    title: "WPomalaza | Professional Portfolio",
+    description: "Modern and lightweight professional portfolio for high-end web development.",
     url: "https://wpomalaza.com",
     siteName: "WPomalaza",
     images: [
@@ -43,8 +44,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "WPomalaza - Portfolio",
-    description: "Modern and lightweight professional portfolio",
+    title: "WPomalaza | Professional Portfolio",
+    description: "Modern and lightweight professional portfolio for high-end web development.",
     images: ["/og-image.png"],
   },
 };
@@ -53,7 +54,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#000000",
+  themeColor: "#10b981",
 };
 
 export default function RootLayout({
