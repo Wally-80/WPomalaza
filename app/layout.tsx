@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { LanguageProvider } from "@/context/LanguageContext";
+import PWAUpdateHandler from "@/components/PWAUpdateHandler";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -69,6 +70,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <LanguageProvider>
+          <PWAUpdateHandler />
           {children}
         </LanguageProvider>
       </body>
