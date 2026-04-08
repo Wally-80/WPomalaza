@@ -88,7 +88,7 @@ export default function AdminLogin() {
       }
     } catch (err: any) {
       console.error('Google login error:', err)
-      setError('Google match failed or was cancelled.')
+      setError(`Login failed (${err.code}). Please ensure wpomalaza.com is an authorized domain in Firebase.`)
       setLoading(false)
     }
   }

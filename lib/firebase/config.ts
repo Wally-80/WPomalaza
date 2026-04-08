@@ -1,6 +1,6 @@
 export const firebaseConfig = {
   apiKey: "AIzaSyDRzA5IG47jLeYzibvtM4B-ZduO1gXKanA",
-  authDomain: "wpomalaza-3a90e.firebaseapp.com",
+  authDomain: "wpomalaza.com",
   projectId: "wpomalaza-3a90e",
   storageBucket: "wpomalaza-3a90e.firebasestorage.app",
   messagingSenderId: "650024330780",
