@@ -7,6 +7,7 @@ import {
   signInWithPopup, 
   signInWithRedirect,
   getRedirectResult,
+  onAuthStateChanged,
   sendPasswordResetEmail,
   GoogleAuthProvider
 } from 'firebase/auth'
@@ -20,11 +21,22 @@ export default function AdminLogin() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [loading, setLoading] = useState(false)
+  const [isAuthenticating, setIsAuthenticating] = useState(true)
   const [isResetMode, setIsResetMode] = useState(false)
   const router = useRouter()
 
-  // Handle redirect result for mobile logins
+  // Handle identity and redirect result for mobile logins
   useEffect(() => {
+    // 1. Check if we already have a user (from a previous session or successful redirect)
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        router.push('/admin/dashboard')
+      } else {
+        setIsAuthenticating(false)
+      }
+    })
+
+    // 2. Explicitly handle the return from a Google Redirect
     const handleRedirect = async () => {
       try {
         const result = await getRedirectResult(auth)
@@ -36,9 +48,12 @@ export default function AdminLogin() {
         if (err.code !== 'auth/popup-closed-by-user') {
           setError('Google login failed. Please try again.')
         }
+        setIsAuthenticating(false)
       }
     }
+
     handleRedirect()
+    return () => unsubscribe()
   }, [router])
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -95,6 +110,18 @@ export default function AdminLogin() {
     } finally {
       setLoading(false)
     }
+  }
+
+  if (isAuthenticating) {
+    return (
+      <div className="min-h-screen bg-[#F8F9FA] flex flex-col items-center justify-center p-6 font-sans">
+        <div className="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-[2rem] flex items-center justify-center mb-6 animate-pulse shadow-sm">
+          <Chrome className="w-10 h-10 animate-spin" />
+        </div>
+        <h2 className="text-xl font-black text-gray-900 tracking-tight">Authenticating...</h2>
+        <p className="text-gray-500 mt-2 font-medium">Please wait while we verify your account</p>
+      </div>
+    )
   }
 
   return (
