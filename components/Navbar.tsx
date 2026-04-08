@@ -43,8 +43,8 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
         {/* Logo */}
-        <Link href="/" className="text-2xl font-bold tracking-tight text-gray-900 hover:text-emerald-600 transition-colors">
-          wpomalaza<span className="text-emerald-500">.com</span>
+        <Link href="/" className="text-2xl font-black tracking-tight text-gray-900 hover:text-emerald-600 transition-colors">
+          WPomalaza
         </Link>
 
         {/* Desktop Navigation */}
@@ -56,13 +56,14 @@ export default function Navbar() {
              {t.nav.projects}
           </Link>
           <div className="flex items-center gap-4 border-l border-gray-200 pl-8">
-            <button className="p-2 text-gray-400 hover:text-emerald-600 transition-colors" aria-label="Search">
+            <button className="p-2 text-gray-400 hover:text-emerald-600 transition-colors" aria-label="Search" suppressHydrationWarning>
               <Search className="w-5 h-5" />
             </button>
             <LanguageSwitcher />
             <Link 
               href="#contact" 
               className="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full text-sm font-semibold transition-all hover:shadow-lg hover:shadow-emerald-500/20 active:scale-95"
+              suppressHydrationWarning
             >
               {t.nav.contact}
             </Link>

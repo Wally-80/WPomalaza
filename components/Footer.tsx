@@ -38,7 +38,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between gap-12 mb-16">
           <div className="max-w-sm">
             <Link href="/" className="text-2xl font-black text-gray-900 tracking-tight mb-6 flex">
-              wpomalaza<span className="text-emerald-500">.com</span>
+              WPomalaza
             </Link>
             <p className="text-gray-500 font-medium leading-relaxed mb-8">
               A modern portfolio showcasing professional web development work, built with high-performance technologies.

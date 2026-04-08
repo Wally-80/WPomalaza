@@ -20,11 +20,14 @@ export default function About() {
   }, [])
 
   const skills = [
+    { name: 'HTML', icon: '🧱', color: 'bg-orange-50 text-orange-600 border-orange-100 hover:bg-orange-600 hover:text-white' },
+    { name: 'CSS', icon: '🎨', color: 'bg-blue-50 text-blue-600 border-blue-100 hover:bg-blue-600 hover:text-white' },
+    { name: 'JavaScript', icon: '⚡', color: 'bg-yellow-50 text-yellow-600 border-yellow-100 hover:bg-yellow-600 hover:text-white' },
     { name: 'React', icon: '⚛️', color: 'bg-blue-50 text-blue-600 border-blue-100 hover:bg-blue-600 hover:text-white' },
     { name: 'Next.js', icon: '🚀', color: 'bg-black text-white border-gray-900 hover:bg-emerald-600' },
     { name: 'Node.js', icon: '🟢', color: 'bg-emerald-50 text-emerald-600 border-emerald-100 hover:bg-emerald-600 hover:text-white' },
     { name: 'TypeScript', icon: '🔷', color: 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-700 hover:text-white' },
-    { name: 'Tailwind CSS', icon: '🎨', color: 'bg-cyan-50 text-cyan-600 border-cyan-100 hover:bg-cyan-600 hover:text-white' },
+    { name: 'Tailwind CSS', icon: '🌊', color: 'bg-cyan-50 text-cyan-600 border-cyan-100 hover:bg-cyan-600 hover:text-white' },
     { name: 'Firebase', icon: '🔥', color: 'bg-orange-50 text-orange-600 border-orange-100 hover:bg-orange-600 hover:text-white' },
     { name: 'PWA', icon: '📱', color: 'bg-purple-50 text-purple-600 border-purple-100 hover:bg-purple-600 hover:text-white' },
   ]

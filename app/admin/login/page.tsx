@@ -5,10 +5,13 @@ import { auth, googleProvider } from '@/lib/firebase/client'
 import { 
   signInWithEmailAndPassword, 
   signInWithPopup, 
+  signInWithRedirect,
+  getRedirectResult,
   sendPasswordResetEmail,
   GoogleAuthProvider
 } from 'firebase/auth'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import { Mail, Lock, LogIn, AlertCircle, CheckCircle2, Chrome, KeyRound, X } from 'lucide-react'
 
 export default function AdminLogin() {
@@ -19,6 +22,24 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false)
   const [isResetMode, setIsResetMode] = useState(false)
   const router = useRouter()
+
+  // Handle redirect result for mobile logins
+  useEffect(() => {
+    const handleRedirect = async () => {
+      try {
+        const result = await getRedirectResult(auth)
+        if (result) {
+          router.push('/admin/dashboard')
+        }
+      } catch (err: any) {
+        console.error('Redirect login error:', err)
+        if (err.code !== 'auth/popup-closed-by-user') {
+          setError('Google login failed. Please try again.')
+        }
+      }
+    }
+    handleRedirect()
+  }, [router])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -39,9 +60,19 @@ export default function AdminLogin() {
     setLoading(true)
     setError('')
     try {
-      await signInWithPopup(auth, googleProvider)
-      router.push('/admin/dashboard')
+      // Detect if user is on mobile
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+      
+      if (isMobile) {
+        // Use redirect for mobile to avoid popup blockers
+        await signInWithRedirect(auth, googleProvider)
+      } else {
+        // Use popup for desktop for better UX
+        await signInWithPopup(auth, googleProvider)
+        router.push('/admin/dashboard')
+      }
     } catch (err: any) {
+      console.error('Google login error:', err)
       setError('Google match failed or was cancelled.')
       setLoading(false)
     }

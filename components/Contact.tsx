@@ -26,23 +26,34 @@ export default function Contact() {
     }
 
     try {
-      // Save to Firebase Firestore
+      // 1. Save to main contacts collection (for Admin Dashboard)
       await addDoc(collection(db, 'contacts'), {
         ...formData,
         timestamp: serverTimestamp(),
         read: false
       })
 
-      // Send email notification (optional - keep for now if user has it set up)
-      try {
-        await fetch('/api/send-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData),
-        })
-      } catch (err) {
-        console.error('Email API failed, but message saved to Firestore.')
-      }
+      // 2. Save to 'mail' collection (Trigger Email extension)
+      // This will automatically trigger an email notification if the extension is installed
+      await addDoc(collection(db, 'mail'), {
+        to: ['contact@wpomalaza.com'], // The recipient email
+        replyTo: formData.email,      // This allows you to just click "Reply" in your email app!
+        message: {
+          subject: `New Portfolio Message from ${formData.name}`,
+          replyTo: formData.email,    // Also inside message object for extra compatibility
+          text: `You have a new message from your portfolio website.\n\nName: ${formData.name}\nEmail: ${formData.email}\nMessage: ${formData.message}`,
+          html: `
+            <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+              <h2 style="color: #10b981;">New Inquiry Received</h2>
+              <p><strong>Name:</strong> ${formData.name}</p>
+              <p><strong>Email:</strong> ${formData.email}</p>
+              <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+              <p><strong>Message:</strong></p>
+              <p style="background: #f9f9f9; padding: 15px; border-radius: 5px; white-space: pre-wrap;">${formData.message}</p>
+            </div>
+          `
+        }
+      })
 
       setStatus('success')
       setFormData({ name: '', email: '', message: '' })
@@ -100,6 +111,7 @@ export default function Contact() {
                     className="w-full pl-12 pr-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500 text-gray-900 font-medium transition-all"
                     placeholder={t.contact.form.name}
                     required
+                    suppressHydrationWarning
                   />
                 </div>
 
@@ -113,6 +125,7 @@ export default function Contact() {
                     className="w-full pl-12 pr-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500 text-gray-900 font-medium transition-all"
                     placeholder={t.contact.form.email}
                     required
+                    suppressHydrationWarning
                   />
                 </div>
 
@@ -137,6 +150,7 @@ export default function Contact() {
                       ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                       : 'bg-emerald-500 text-white shadow-emerald-500/20 hover:bg-emerald-600 hover:shadow-emerald-500/40'
                   }`}
+                  suppressHydrationWarning
                 >
                   {status === 'loading' ? t.contact.form.sending : (
                     <>

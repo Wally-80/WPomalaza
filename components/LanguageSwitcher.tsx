@@ -22,6 +22,7 @@ export default function LanguageSwitcher() {
             : 'text-gray-400 hover:text-gray-500'
         }`}
         aria-label="Switch to English"
+        suppressHydrationWarning
       >
         <span className="text-[10px] sm:text-xs font-black tracking-[0.1em] uppercase block text-center">
           English
@@ -36,6 +37,7 @@ export default function LanguageSwitcher() {
             : 'text-gray-400 hover:text-gray-500'
         }`}
         aria-label="Cambiar a Español"
+        suppressHydrationWarning
       >
         <span className="text-[10px] sm:text-xs font-black tracking-[0.1em] uppercase block text-center">
           Español
