@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Search, Mail, Menu, X, Globe } from 'lucide-react'
 import { db } from '@/lib/firebase/client'
 import { doc, onSnapshot } from 'firebase/firestore'
@@ -43,8 +44,18 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
         {/* Logo */}
-        <Link href="/" className="text-2xl font-black tracking-tight text-gray-900 hover:text-emerald-600 transition-colors">
-          WPomalaza
+        <Link href="/" className="flex items-center gap-3 group transition-transform active:scale-95">
+          <div className="relative w-10 h-10 bg-emerald-50 rounded-xl overflow-hidden shadow-sm group-hover:shadow-emerald-500/10 transition-all border border-emerald-100/50">
+            <Image 
+              src="/icon.png" 
+              alt="WP Logo" 
+              fill 
+              className="object-cover p-1"
+            />
+          </div>
+          <span className="text-2xl font-black tracking-tight text-gray-900 group-hover:text-emerald-600 transition-colors">
+            WPomalaza
+          </span>
         </Link>
 
         {/* Desktop Navigation */}

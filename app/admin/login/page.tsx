@@ -13,6 +13,7 @@ import {
 } from 'firebase/auth'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
+import Image from 'next/image'
 import { Mail, Lock, LogIn, AlertCircle, CheckCircle2, Chrome, KeyRound, X } from 'lucide-react'
 
 export default function AdminLogin() {
@@ -133,8 +134,16 @@ export default function AdminLogin() {
         <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-50 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 opacity-60" />
 
         <div className="text-center mb-12 relative">
-          <div className="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-sm">
-            {isResetMode ? <KeyRound className="w-10 h-10" /> : <Lock className="w-10 h-10" />}
+          <div className="w-24 h-24 mx-auto mb-8 relative group">
+            <div className="absolute inset-0 bg-emerald-500/10 rounded-[2.5rem] blur-2xl group-hover:bg-emerald-500/20 transition-all duration-700" />
+            <div className="relative w-full h-full bg-white rounded-[2.5rem] shadow-xl border border-emerald-50 overflow-hidden p-2">
+              <Image 
+                src="/icon.png" 
+                alt="WP Logo" 
+                fill 
+                className="object-cover p-2"
+              />
+            </div>
           </div>
           <h1 className="text-4xl font-black text-gray-900 tracking-tight">
             {isResetMode ? 'Reset Password' : 'Admin Portal'}

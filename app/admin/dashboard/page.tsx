@@ -104,8 +104,15 @@ export default function AdminDashboard() {
       {/* Modern Sidebar */}
       <aside className={`fixed left-0 top-0 bottom-0 w-80 bg-white border-r border-gray-100 p-10 z-50 transition-all duration-500 lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="mb-16">
-          <div className="text-3xl font-black text-gray-900 tracking-tighter flex items-center gap-3">
-             <div className="w-10 h-10 bg-emerald-500 rounded-2xl flex items-center justify-center text-white text-xl">W</div>
+          <div className="text-3xl font-black text-gray-900 tracking-tighter flex items-center gap-4">
+             <div className="relative w-12 h-12 bg-emerald-50 rounded-2xl overflow-hidden shadow-sm border border-emerald-100/50">
+               <Image 
+                src="/icon.png" 
+                alt="WP Logo" 
+                fill 
+                className="object-cover p-1.5"
+               />
+             </div>
              Admin Portal
           </div>
           <p className="text-[10px] text-emerald-600 font-black tracking-[0.2em] uppercase opacity-40 italic mt-3 pl-1">Premium Identity v2.0</p>

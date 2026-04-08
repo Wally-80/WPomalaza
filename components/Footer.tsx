@@ -6,6 +6,7 @@ import { doc, onSnapshot } from 'firebase/firestore'
 import { useLanguage } from '@/context/LanguageContext'
 import { Github, Twitter, Linkedin, Heart, Mail } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Footer() {
   const { t } = useLanguage()
@@ -37,8 +38,18 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="flex flex-col md:flex-row justify-between gap-12 mb-16">
           <div className="max-w-sm">
-            <Link href="/" className="text-2xl font-black text-gray-900 tracking-tight mb-6 flex">
-              WPomalaza
+            <Link href="/" className="flex items-center gap-3 group mb-6">
+              <div className="relative w-8 h-8 bg-emerald-50 rounded-lg overflow-hidden border border-emerald-100/50 group-hover:shadow-emerald-500/10 transition-all">
+                <Image 
+                  src="/icon.png" 
+                  alt="WP Logo" 
+                  fill 
+                  className="object-cover p-1"
+                />
+              </div>
+              <span className="text-xl font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">
+                WPomalaza
+              </span>
             </Link>
             <p className="text-gray-500 font-medium leading-relaxed mb-8">
               A modern portfolio showcasing professional web development work, built with high-performance technologies.
