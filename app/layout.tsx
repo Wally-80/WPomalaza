@@ -25,8 +25,8 @@ export const metadata: Metadata = {
     title: "WPomalaza",
   },
   icons: {
-    icon: "/icon.svg?v=3",
-    apple: "/icons/icon-192.png?v=3",
+    icon: "/icon.png?v=4",
+    apple: "/apple-icon.png?v=4",
   },
   openGraph: {
     title: "WPomalaza | Professional Portfolio",
