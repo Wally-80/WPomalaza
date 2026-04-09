@@ -10,18 +10,17 @@ export interface Translations {
     contact: string
   }
   // Hero Section
-    hero: {
-      welcome: string
-      greeting: string
-      title: string
-      subtitle: string
-      viewProjects: string
-      contactMe: string
-      cta: {
-        primary: string
-        secondary: string
-      }
-    }
+  hero: {
+    welcome: string
+    greeting: string
+    title: string
+    subtitle: string
+    viewProjects: string
+    contactMe: string
+    professionalTitle: string
+    intro: string
+    professionalIntro: string
+  }
   // About Section
   about: {
     title: string
@@ -32,11 +31,16 @@ export interface Translations {
       clients: string
     }
     skillsTitle: string
+    techStack: string
+    catchphrase: string
+    webApps: string
   }
   // Services Section
   services: {
     title: string
     subtitle: string
+    tag: string
+    mainTitle: string
     items: {
       webDev: {
         title: string
@@ -68,14 +72,20 @@ export interface Translations {
   projects: {
     title: string
     subtitle: string
+    tag: string
+    mainTitle: string
     viewDemo: string
     viewCode: string
     noProjects: string
+    adminHint: string
   }
   // Contact Section
   contact: {
     title: string
     subtitle: string
+    tag: string
+    mainTitle: string
+    mainTitleHighlight: string
     info: {
       location: {
         title: string
@@ -100,12 +110,19 @@ export interface Translations {
       error: string
       errorRequired: string
       errorInvalidEmail: string
+      successTitle: string
     }
   }
   // Footer
   footer: {
     rights: string
     builtWith: string
+  }
+  // PWA Update
+  pwa: {
+    updateTitle: string
+    updateMessage: string
+    updateButton: string
   }
 }
 
@@ -125,10 +142,9 @@ export const translations: Record<Language, Translations> = {
       subtitle: 'Developer',
       viewProjects: 'View Projects',
       contactMe: 'Contact Me',
-      cta: {
-        primary: 'View Projects',
-        secondary: 'Contact Me',
-      },
+      professionalTitle: 'Innovator Designer',
+      intro: "I'm",
+      professionalIntro: 'a professional',
     },
     about: {
       title: 'About Me',
@@ -139,10 +155,15 @@ export const translations: Record<Language, Translations> = {
         clients: 'Happy Clients',
       },
       skillsTitle: 'My Skills',
+      techStack: 'My Tech Stack',
+      catchphrase: 'A passionate developer building the next generation of',
+      webApps: 'web apps'
     },
     services: {
       title: 'Services',
       subtitle: 'I offer a wide range of web development services to help take your project to the next level.',
+      tag: 'My Services',
+      mainTitle: 'Bringing Your Ideas to Life',
       items: {
         webDev: {
           title: 'Web Development',
@@ -173,13 +194,19 @@ export const translations: Record<Language, Translations> = {
     projects: {
       title: 'Projects',
       subtitle: 'Some of my recent work',
-      viewDemo: 'View Demo',
-      viewCode: 'View Code',
+      tag: 'Portfolio',
+      mainTitle: 'My Recent Projects',
+      viewDemo: 'Live',
+      viewCode: 'Code',
       noProjects: 'No projects available yet.',
+      adminHint: 'Add something amazing via the Admin dashboard!',
     },
     contact: {
       title: 'Contact',
       subtitle: 'Let\'s work together on your next project',
+      tag: 'Get In Touch',
+      mainTitle: 'Ready to start your next',
+      mainTitleHighlight: 'project?',
       info: {
         location: {
           title: 'Location',
@@ -204,11 +231,17 @@ export const translations: Record<Language, Translations> = {
         error: 'Error sending message. Please try again.',
         errorRequired: 'All fields are required',
         errorInvalidEmail: 'Invalid email address',
+        successTitle: 'Message Sent!',
       },
     },
     footer: {
       rights: 'All rights reserved',
       builtWith: 'Built with Next.js & Firebase',
+    },
+    pwa: {
+      updateTitle: 'New Version Available',
+      updateMessage: 'We\'ve just pushed some exciting updates to WPomalaza.',
+      updateButton: 'Update Now',
     },
   },
   es: {
@@ -226,10 +259,9 @@ export const translations: Record<Language, Translations> = {
       subtitle: 'Soy Desarrollador Frontend and Backend',
       viewProjects: 'Ver Proyectos',
       contactMe: 'Contáctame',
-      cta: {
-        primary: 'Ver Proyectos',
-        secondary: 'Contáctame',
-      },
+      professionalTitle: 'Innovador Diseñador',
+      intro: 'Soy',
+      professionalIntro: 'un',
     },
     about: {
       title: 'Sobre Mí',
@@ -240,10 +272,15 @@ export const translations: Record<Language, Translations> = {
         clients: 'Clientes Satisfechos',
       },
       skillsTitle: 'Mis Habilidades',
+      techStack: 'Mi Stack Tecnológico',
+      catchphrase: 'Un desarrollador apasionado construyendo la próxima generación de',
+      webApps: 'aplicaciones web'
     },
     services: {
       title: 'Servicios',
       subtitle: 'Ofrezco una amplia gama de servicios de desarrollo web para ayudarte a llevar tu proyecto al siguiente nivel.',
+      tag: 'Mis Servicios',
+      mainTitle: 'Haciendo realidad tus ideas',
       items: {
         webDev: {
           title: 'Desarrollo Web',
@@ -274,13 +311,19 @@ export const translations: Record<Language, Translations> = {
     projects: {
       title: 'Proyectos',
       subtitle: 'Algunos de mis trabajos recientes',
-      viewDemo: 'Ver Demo',
-      viewCode: 'Ver Código',
+      tag: 'Portafolio',
+      mainTitle: 'Mis Proyectos Recientes',
+      viewDemo: 'En Vivo',
+      viewCode: 'Código',
       noProjects: 'No hay proyectos disponibles aún.',
+      adminHint: '¡Agrega algo increíble a través del panel de Administración!',
     },
     contact: {
       title: 'Contacto',
       subtitle: 'Trabajemos juntos en tu próximo proyecto',
+      tag: 'Ponte en contacto',
+      mainTitle: '¿Listo para empezar tu próximo',
+      mainTitleHighlight: 'proyecto?',
       info: {
         location: {
           title: 'Ubicación',
@@ -305,11 +348,17 @@ export const translations: Record<Language, Translations> = {
         error: 'Error al enviar el mensaje. Por favor intenta de nuevo.',
         errorRequired: 'Todos los campos son requeridos',
         errorInvalidEmail: 'Correo electrónico inválido',
+        successTitle: '¡Mensaje Enviado!',
       },
     },
     footer: {
       rights: 'Todos los derechos reservados',
       builtWith: 'Hecho con Next.js y Firebase',
+    },
+    pwa: {
+      updateTitle: 'Nueva Versión Disponible',
+      updateMessage: 'Acabamos de lanzar algunas actualizaciones emocionantes para WPomalaza.',
+      updateButton: 'Actualizar Ahora',
     },
   },
 }

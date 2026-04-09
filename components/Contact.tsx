@@ -73,10 +73,10 @@ export default function Contact() {
           <div className="lg:w-1/2">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-600 text-sm font-bold tracking-wide uppercase mb-6 shadow-sm shadow-emerald-200/50">
               <Mail className="w-4 h-4" />
-              Get In Touch
+              {t.contact.tag}
             </div>
             <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
-              Ready to start your next <span className="text-emerald-500">project?</span>
+              {t.contact.mainTitle} <span className="text-emerald-500">{t.contact.mainTitleHighlight}</span>
             </h2>
             <p className="text-xl text-gray-600 mb-10 leading-relaxed max-w-lg">
               {t.contact.subtitle}
@@ -165,7 +165,7 @@ export default function Contact() {
               {status === 'success' && (
                 <div className="absolute inset-0 bg-emerald-500/95 backdrop-blur-sm flex flex-col items-center justify-center text-white p-8 animate-in fade-in duration-300">
                   <CheckCircle2 className="w-20 h-20 mb-4 animate-bounce" />
-                  <p className="text-3xl font-bold text-center mb-2">Message Sent!</p>
+                  <p className="text-3xl font-bold text-center mb-2">{t.contact.form.successTitle}</p>
                   <p className="text-center font-medium opacity-90">{t.contact.form.success}</p>
                 </div>
               )}

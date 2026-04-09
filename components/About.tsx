@@ -40,31 +40,32 @@ export default function About() {
 
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-600 text-sm font-bold tracking-wide uppercase mb-10 shadow-sm shadow-emerald-200/50">
           <GraduationCap className="w-4 h-4" />
-          About Me
+          {t.about.title}
         </div>
         
         <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-8 leading-tight tracking-tight">
-          A passionate developer building the next generation of <span className="text-emerald-500 underline decoration-emerald-200 decoration-4 underline-offset-8">web apps</span>.
+          {t.about.catchphrase} <span className="text-emerald-500 underline decoration-emerald-200 decoration-4 underline-offset-8">{t.about.webApps}</span>.
         </h2>
         
         <p className="text-lg md:text-xl text-gray-600 mb-16 leading-relaxed max-w-2xl mx-auto font-medium">
           {bio || t.about.description}
         </p>
-
+ 
         {/* Skills Section */}
         <div className="pt-8 border-t border-gray-100">
            <h3 className="text-lg font-bold text-gray-400 uppercase tracking-[0.2em] mb-10 flex items-center justify-center gap-3">
              <Cpu className="w-5 h-5 text-emerald-500" />
-             My Tech Stack
+             {t.about.techStack}
            </h3>
            <div className="flex flex-wrap justify-center gap-3 md:gap-5">
              {skills.map((skill, index) => (
                <div 
                  key={index} 
-                 className={`flex items-center gap-3 px-6 py-3 rounded-2xl border-2 transition-all hover:-translate-y-1 hover:shadow-xl active:scale-95 cursor-default ${skill.color}`}
+                 style={{ minWidth: '150px' }}
+                 className={`flex items-center justify-center gap-3 px-6 py-4 rounded-2xl border-2 transition-all hover:-translate-y-1 hover:shadow-xl active:scale-95 cursor-default ${skill.color}`}
                >
                  <span className="text-xl">{skill.icon}</span>
-                 <span className="font-extrabold text-sm tracking-tight">{skill.name}</span>
+                 <span className="font-extrabold text-sm tracking-tight whitespace-nowrap">{skill.name}</span>
                </div>
              ))}
            </div>

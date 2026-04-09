@@ -51,10 +51,10 @@ export default function Services() {
         <div className="mb-20 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-600 text-sm font-bold tracking-wide uppercase mb-6 shadow-sm shadow-emerald-200/50">
             <Sparkles className="w-4 h-4" />
-            My Services
+            {t.services.tag}
           </div>
           <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
-             Bringing Your <span className="text-emerald-500">Ideas</span> to Life
+             {t.services.mainTitle}
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
             {t.services.subtitle}

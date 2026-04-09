@@ -16,6 +16,7 @@ interface Project {
   github_url: string
   technologies: string[]
   created_at: any
+  display_order?: number
 }
 
 export default function Projects() {
@@ -25,7 +26,8 @@ export default function Projects() {
 
   useEffect(() => {
     // Listen for real-time updates from Firestore
-    const q = query(collection(db, 'projects'), orderBy('created_at', 'desc'))
+    // Fetching all projects to ensure none are hidden by missing display_order fields
+    const q = query(collection(db, 'projects'))
     
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const projectsData = snapshot.docs.map((doc) => ({
@@ -33,7 +35,14 @@ export default function Projects() {
         ...doc.data()
       })) as Project[]
       
-      setProjects(projectsData)
+      // Sort in memory so projects without a display_order field still appear
+      const sortedData = [...projectsData].sort((a, b) => {
+        const orderA = a.display_order ?? 999
+        const orderB = b.display_order ?? 999
+        return orderA - orderB
+      })
+      
+      setProjects(sortedData)
       setLoading(false)
     }, (error) => {
       console.error('Error fetching projects:', error)
@@ -50,10 +59,10 @@ export default function Projects() {
         <div className="mb-16 text-center md:text-left">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-600 text-sm font-bold tracking-wide uppercase mb-6 shadow-sm shadow-emerald-200/50">
             <Briefcase className="w-4 h-4" />
-            Portfolio
+            {t.projects.tag}
           </div>
           <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
-             My Recent <span className="text-emerald-500">Projects</span>
+             {t.projects.mainTitle}
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl leading-relaxed">
             {t.projects.subtitle}
@@ -70,7 +79,7 @@ export default function Projects() {
           <div className="text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
             <Code className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <p className="text-xl text-gray-500 font-medium">{t.projects.noProjects}</p>
-            <p className="text-gray-400 mt-2 text-sm italic">Add something amazing via the Admin dashboard!</p>
+            <p className="text-gray-400 mt-2 text-sm italic">{t.projects.adminHint}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
@@ -139,7 +148,7 @@ export default function Projects() {
                         className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-200 text-gray-900 rounded-2xl hover:bg-gray-50 transition-all font-bold text-sm shadow-sm active:scale-95"
                       >
                         <Github className="w-4 h-4" />
-                        Code
+                        {t.projects.viewCode}
                       </a>
                     )}
                     {project.live_url && (
@@ -150,7 +159,7 @@ export default function Projects() {
                         className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-emerald-500 text-white rounded-2xl hover:bg-emerald-600 transition-all font-bold text-sm shadow-lg shadow-emerald-500/20 active:scale-95"
                       >
                         <ExternalLink className="w-4 h-4" />
-                        Live
+                        {t.projects.viewDemo}
                       </a>
                     )}
                   </div>

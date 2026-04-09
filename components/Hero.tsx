@@ -37,7 +37,7 @@ export default function Hero() {
             </div>
             
             <h1 className="text-5xl md:text-7xl font-black text-gray-900 tracking-tight leading-[1.05] md:leading-[1.1]">
-              I'm <span className="text-emerald-500">{settings.name}</span>, a professional <span className="relative inline-block">Web Developer<span className="absolute bottom-2 left-0 w-full h-3 bg-emerald-100 -z-10 -rotate-1 rounded-full opacity-60"></span></span>
+              {t.hero.intro} <span className="text-emerald-500">{settings.name}</span>, {t.hero.professionalIntro} <span className="relative inline-block">{t.hero.professionalTitle}<span className="absolute bottom-2 left-0 w-full h-3 bg-emerald-100 -z-10 -rotate-1 rounded-full opacity-60"></span></span>
             </h1>
             
             <p className="text-xl md:text-2xl text-gray-500 font-medium max-w-2xl mx-auto lg:mx-0 leading-relaxed italic">

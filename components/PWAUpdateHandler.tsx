@@ -87,10 +87,10 @@ export default function PWAUpdateHandler() {
           
           <div className="flex-1">
             <h4 className="text-gray-900 font-black text-lg leading-tight mb-1">
-              New Version Available
+              {t.pwa.updateTitle}
             </h4>
             <p className="text-gray-500 text-sm font-medium leading-relaxed">
-              We've just pushed some exciting updates to WPomalaza.
+              {t.pwa.updateMessage}
             </p>
             
             <div className="flex items-center gap-3 mt-5">
@@ -99,7 +99,7 @@ export default function PWAUpdateHandler() {
                 className="flex-1 flex items-center justify-center gap-2 py-3 bg-emerald-500 text-white rounded-xl font-bold text-sm shadow-lg shadow-emerald-500/20 hover:bg-emerald-600 transition-all active:scale-95"
               >
                 <RefreshCw className="w-4 h-4" />
-                Update Now
+                {t.pwa.updateButton}
               </button>
               <button
                 onClick={() => setShow(false)}

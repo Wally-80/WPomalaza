@@ -2,22 +2,36 @@
 
 import { useState, useEffect } from 'react'
 import { db, auth } from '@/lib/firebase/client'
-import { collection, query, orderBy, onSnapshot, deleteDoc, doc } from 'firebase/firestore'
+import { collection, query, orderBy, onSnapshot, deleteDoc, doc, updateDoc } from 'firebase/firestore'
 import { signOut } from 'firebase/auth'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import ProjectForm from '../components/ProjectForm'
 import ProfileSettings from '../components/ProfileSettings'
 import InquiryInbox from '../components/InquiryInbox'
+import ProposalManager from '../components/ProposalManager'
+import ClientHistory from '../components/ClientHistory'
+import NotificationTray from '../components/NotificationTray'
+import { subscribeToProposals, Proposal } from '@/lib/firebase/proposals'
 import { 
   Plus, Edit2, Trash2, LogOut, LayoutDashboard, 
   Settings, User, ExternalLink, Github, Loader2,
   AlertCircle, CheckCircle2, Briefcase, Mail,
-  LayoutGrid, ChevronRight, Menu, X
+  LayoutGrid, ChevronRight, Menu, X, ChevronUp, ChevronDown,
+  FileText, ClipboardList
 } from 'lucide-react'
 import Image from 'next/image'
 
-type Tab = 'projects' | 'profile' | 'inbox'
+type Tab = 'projects' | 'profile' | 'inbox' | 'proposals' | 'clients'
+
+interface ContactMessage {
+  id: string
+  name: string
+  email: string
+  message: string
+  timestamp: any
+  read: boolean
+}
 
 interface Project {
   id: string
@@ -27,6 +41,7 @@ interface Project {
   live_url: string
   github_url: string
   technologies: string[]
+  display_order?: number
 }
 
 export default function AdminDashboard() {
@@ -37,21 +52,74 @@ export default function AdminDashboard() {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [editingProject, setEditingProject] = useState<Project | null>(null)
+  const [proposals, setProposals] = useState<Proposal[]>([])
+  const [contacts, setContacts] = useState<ContactMessage[]>([])
   const [status, setStatus] = useState({ type: '', message: '' })
   const router = useRouter()
 
   useEffect(() => {
     if (authLoading || !user) return
 
-    const q = query(collection(db, 'projects'), orderBy('created_at', 'desc'))
-    const unsubscribe = onSnapshot(q, (snapshot) => {
+    // Projects Listener
+    const projectQuery = query(collection(db, 'projects'))
+    const unsubProjects = onSnapshot(projectQuery, (snapshot) => {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Project[]
-      setProjects(data)
+      const sortedData = [...data].sort((a, b) => (a.display_order ?? 999) - (b.display_order ?? 999))
+      setProjects(sortedData)
       setLoading(false)
     })
 
-    return () => unsubscribe()
+    // Proposals Listener
+    const unsubProposals = subscribeToProposals((data) => {
+      // Logic for new acceptance notification toast
+      const oldAcceptedCount = proposals.filter(p => p.status === 'accepted').length
+      const newAcceptedCount = data.filter(p => p.status === 'accepted').length
+      
+      if (newAcceptedCount > oldAcceptedCount && oldAcceptedCount > 0) {
+         setStatus({ type: 'success', message: '🎉 NEW PROPOSAL ACCEPTED! A client just signed a contract.' })
+         setTimeout(() => setStatus({ type: '', message: '' }), 10000)
+      }
+      setProposals(data)
+    })
+
+    // Contacts Listener
+    const contactQuery = query(collection(db, 'contacts'), orderBy('timestamp', 'desc'))
+    const unsubContacts = onSnapshot(contactQuery, (snapshot) => {
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as ContactMessage[]
+      setContacts(data)
+    })
+
+    return () => {
+      unsubProjects()
+      unsubProposals()
+      unsubContacts()
+    }
   }, [user, authLoading])
+
+  const moveProject = async (id: string, direction: 'up' | 'down') => {
+    const index = projects.findIndex(p => p.id === id)
+    if (direction === 'up' && index === 0) return
+    if (direction === 'down' && index === projects.length - 1) return
+
+    const targetIndex = direction === 'up' ? index - 1 : index + 1
+    const currentProject = projects[index]
+    const targetProject = projects[targetIndex]
+
+    try {
+      // Simple swap logic
+      const tmpOrder = currentProject.display_order || index + 1
+      const targetOrder = targetProject.display_order || targetIndex + 1
+      
+      await updateDoc(doc(db, 'projects', currentProject.id), { display_order: targetOrder })
+      await updateDoc(doc(db, 'projects', targetProject.id), { display_order: tmpOrder })
+      
+      setStatus({ type: 'success', message: 'Order updated!' })
+      setTimeout(() => setStatus({ type: '', message: '' }), 2000)
+    } catch (err) {
+      console.error('Error reordering:', err)
+      setStatus({ type: 'error', message: 'Failed to reorder projects.' })
+    }
+  }
 
   const handleLogout = async () => {
     await signOut(auth)
@@ -85,8 +153,10 @@ export default function AdminDashboard() {
 
   const navItems = [
     { id: 'projects', label: 'Project Catalog', icon: Briefcase },
-    { id: 'profile', label: 'Profile & Identity', icon: User },
+    { id: 'proposals', label: 'Service Proposals', icon: ClipboardList },
+    { id: 'clients', label: 'Clients & CRM', icon: User },
     { id: 'inbox', label: 'Inquiry Inbox', icon: Mail },
+    { id: 'profile', label: 'Profile Settings', icon: Settings },
   ]
 
   return (
@@ -160,7 +230,34 @@ export default function AdminDashboard() {
         {/* Content Tabs */}
         <div className="relative">
           {activeTab === 'projects' && (
-            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+               {/* Dashboard Header Bar */}
+               <div className="flex justify-between items-center mb-12">
+                  <div className="hidden lg:block">
+                     <p className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.3em]">Operational Oversight</p>
+                     <h2 className="text-2xl font-black text-gray-900 tracking-tight">System Overview</h2>
+                  </div>
+                  
+                  <div className="flex items-center gap-6">
+                    <NotificationTray 
+                      proposals={proposals} 
+                      inquiries={contacts} 
+                      activeTab={activeTab} 
+                      onTabChange={setActiveTab}
+                    />
+                    <div className="h-10 w-px bg-gray-100 mx-2" />
+                    <div className="flex items-center gap-4 bg-white p-2 pr-6 rounded-2xl border border-gray-100 shadow-sm">
+                       <div className="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center text-white font-black">
+                          {user?.email?.[0].toUpperCase()}
+                       </div>
+                       <div className="hidden sm:block">
+                          <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1">Authenticated as</p>
+                          <p className="text-xs font-black text-gray-900 leading-none">{user?.email}</p>
+                       </div>
+                    </div>
+                  </div>
+               </div>
+
                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-8">
                 <div>
                   <h1 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight leading-none mb-3">Project Catalog</h1>
@@ -205,18 +302,32 @@ export default function AdminDashboard() {
                       )}
                       
                       {/* Floating Actions */}
-                      <div className="absolute top-8 right-8 flex flex-col gap-3 translate-x-12 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-500">
+                      <div className="absolute top-5 right-5 lg:top-8 lg:right-8 flex flex-col gap-3 lg:translate-x-12 lg:opacity-0 lg:group-hover:translate-x-0 lg:group-hover:opacity-100 transition-all duration-500">
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); moveProject(project.id, 'up') }}
+                          title="Move Up"
+                          className="p-3 lg:p-4 bg-white/95 backdrop-blur text-emerald-600 rounded-2xl shadow-xl hover:bg-emerald-500 hover:text-white transition-all active:scale-90"
+                        >
+                          <ChevronUp className="w-4 h-4 lg:w-5 lg:h-5" />
+                        </button>
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); moveProject(project.id, 'down') }}
+                          title="Move Down"
+                          className="p-3 lg:p-4 bg-white/95 backdrop-blur text-emerald-600 rounded-2xl shadow-xl hover:bg-emerald-500 hover:text-white transition-all active:scale-90"
+                        >
+                          <ChevronDown className="w-4 h-4 lg:w-5 lg:h-5" />
+                        </button>
                         <button 
                           onClick={() => openEdit(project)}
-                          className="p-4 bg-white/95 backdrop-blur text-gray-900 rounded-2xl shadow-xl hover:bg-emerald-500 hover:text-white transition-all active:scale-90"
+                          className="p-3 lg:p-4 bg-white/95 backdrop-blur text-gray-900 rounded-2xl shadow-xl hover:bg-emerald-500 hover:text-white transition-all active:scale-90"
                         >
-                          <Edit2 className="w-5 h-5" />
+                          <Edit2 className="w-4 h-4 lg:w-5 lg:h-5" />
                         </button>
                         <button 
                           onClick={() => handleDelete(project.id)}
-                          className="p-4 bg-white/95 backdrop-blur text-red-500 rounded-2xl shadow-xl hover:bg-red-500 hover:text-white transition-all active:scale-90"
+                          className="p-3 lg:p-4 bg-white/95 backdrop-blur text-red-500 rounded-2xl shadow-xl hover:bg-red-500 hover:text-white transition-all active:scale-90"
                         >
-                          <Trash2 className="w-5 h-5" />
+                          <Trash2 className="w-4 h-4 lg:w-5 lg:h-5" />
                         </button>
                       </div>
                     </div>
@@ -264,6 +375,8 @@ export default function AdminDashboard() {
 
           {activeTab === 'profile' && <ProfileSettings />}
           {activeTab === 'inbox' && <InquiryInbox />}
+          {activeTab === 'proposals' && <ProposalManager />}
+          {activeTab === 'clients' && <ClientHistory proposals={proposals} inquiries={contacts} />}
         </div>
       </main>
 
