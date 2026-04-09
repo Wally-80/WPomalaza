@@ -20,3 +20,8 @@ Integrating a "Digital Service Proposal" module to streamline client onboarding 
 - [ ] Responsive design optimization for public proposals
 - [ ] Digital signature simulation
 - [ ] Status animations and transitions
+
+## Phase 4: Social Media Management
+- [x] Implement Dynamic Social Media Manager in Admin Portal
+- [x] Migrate hardcoded social links to Firestore configuration
+- [x] Update Navbar and Footer to use dynamic links

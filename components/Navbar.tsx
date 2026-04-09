@@ -22,7 +22,12 @@ export default function Navbar() {
   useEffect(() => {
     const unsubscribe = onSnapshot(doc(db, 'settings', 'main'), (doc) => {
       if (doc.exists()) {
-        setSocials(doc.data().socials || {})
+        const data = doc.data()
+        // Provide both formats for compatibility
+        setSocials({
+          ...(data.socials || {}),
+          socialLinks: data.socialLinks || []
+        } as any)
       }
     })
 

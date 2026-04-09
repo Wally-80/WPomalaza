@@ -15,3 +15,8 @@
 - [x] Client Action: "Accept Proposal"
 - [x] Admin Notification for Acceptance
 - [x] Sharing: WhatsApp/Email/Link
+
+## Social Media Management
+- [x] Dynamic configuration system for social links
+- [x] Admin UI for adding/editing/removing platforms
+- [x] Real-time synchronization with Navbar/Footer

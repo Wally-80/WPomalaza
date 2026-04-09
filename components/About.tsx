@@ -35,8 +35,9 @@ export default function About() {
   return (
     <section id="about" className="py-24 bg-white relative overflow-hidden">
       <div className="max-w-4xl mx-auto px-6 md:px-12 relative text-center">
-        {/* Soft centered background circle */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-emerald-50/30 rounded-full blur-3xl opacity-50 -z-10" />
+        {/* Soft centered background circles */}
+        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-72 h-72 bg-emerald-50/50 rounded-full blur-[100px] opacity-60 -z-10 animate-pulse" />
+        <div className="absolute top-1/3 right-1/4 -translate-y-1/2 w-64 h-64 bg-blue-50/50 rounded-full blur-[80px] opacity-40 -z-10" />
 
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-600 text-sm font-bold tracking-wide uppercase mb-10 shadow-sm shadow-emerald-200/50">
           <GraduationCap className="w-4 h-4" />
