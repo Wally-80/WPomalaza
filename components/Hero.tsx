@@ -28,9 +28,9 @@ export default function Hero() {
   }, [])
 
   return (
-    <section className="pt-16 pb-16 md:pt-32 md:pb-32 bg-[#FDFDFD] overflow-hidden">
+    <section className="pt-28 pb-16 md:pt-32 md:pb-32 bg-[#FDFDFD] overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative">
-        <div className="flex flex-col lg:flex-row items-start justify-between gap-8 lg:gap-20">
+        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-8 lg:gap-20">
           
           <div className="text-center lg:text-left space-y-6 lg:space-y-10 animate-in fade-in slide-in-from-left-8 duration-1000 lg:flex-[1.6] order-1 lg:order-none">
             <div className="space-y-4">
