@@ -98,10 +98,10 @@ export default function Hero() {
 
           {/* Mobile Description & Buttons */}
           <div className="lg:hidden space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300 order-3">
-             <p className="text-lg text-gray-500 font-medium italic leading-relaxed">
+             <p className="text-lg text-gray-500 font-medium italic leading-relaxed text-center">
                {settings.title}
              </p>
-             <div className="flex flex-col gap-4">
+             <div className="flex flex-col items-center gap-4">
                 <Link
                   href="#projects"
                   className="w-full flex items-center justify-center gap-3 px-10 py-5 bg-gray-900 text-white rounded-[2rem] font-black text-lg active:scale-95 transition-all shadow-xl"
