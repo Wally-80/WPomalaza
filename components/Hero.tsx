@@ -13,7 +13,9 @@ export default function Hero() {
   const [settings, setSettings] = useState({
     name: 'Walter Pomalaza',
     title: 'React, Next.js & Node.js Developer',
-    profile_image_url: ''
+    profile_image_url: '',
+    hero_welcome: '',
+    hero_tagline: ''
   })
 
   useEffect(() => {
