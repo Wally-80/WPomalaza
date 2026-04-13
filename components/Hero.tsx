@@ -26,19 +26,29 @@ export default function Hero() {
   }, [])
 
   return (
-    <section className="pt-20 pb-20 md:pt-40 md:pb-32 bg-[#FDFDFD] overflow-hidden">
+    <section className="pt-16 pb-16 md:pt-32 md:pb-32 bg-[#FDFDFD] overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-20">
+        <div className="flex flex-col lg:flex-row items-start justify-between gap-8 lg:gap-20">
           
-          <div className="text-center lg:text-left space-y-6 lg:space-y-10 animate-in fade-in slide-in-from-left-8 duration-1000 lg:flex-1 order-1 lg:order-none">
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-600 text-sm font-bold tracking-wide uppercase shadow-sm shadow-emerald-200/50">
-                <Sparkles className="w-4 h-4 text-emerald-500" />
-                {t.hero.welcome}
+          <div className="text-center lg:text-left space-y-6 lg:space-y-10 animate-in fade-in slide-in-from-left-8 duration-1000 lg:flex-[1.6] order-1 lg:order-none">
+            <div className="space-y-4">
+              <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-emerald-50 text-emerald-600 text-[10px] font-black tracking-[0.2em] uppercase shadow-sm border border-emerald-100/50">
+                <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
+                {settings.hero_welcome || t.hero.welcome}
               </div>
               
-              <h1 className="text-5xl md:text-7xl font-black text-gray-900 tracking-tight leading-[1.05] md:leading-[1.1] md:mt-6">
-                {t.hero.intro} <span className="text-emerald-500">{settings.name}</span>, <br className="hidden md:block" /> {t.hero.professionalIntro} <span className="relative inline-block whitespace-nowrap">{t.hero.professionalTitle}<span className="absolute bottom-2 left-0 w-full h-3 bg-emerald-100 -z-10 -rotate-1 rounded-full opacity-60"></span></span>
+              <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 tracking-tight leading-[1.2] md:leading-[1.25] md:mt-8">
+                {settings.hero_tagline ? (
+                  settings.hero_tagline.split(new RegExp(`(${settings.name})`, 'gi')).map((part, i) => 
+                    part.toLowerCase() === settings.name.toLowerCase() 
+                      ? <span key={i} className="text-emerald-500">{part}</span> 
+                      : part
+                  )
+                ) : (
+                  <>
+                    {t.hero.intro} <span className="text-emerald-500">{settings.name}</span>, <br className="hidden md:block" /> {t.hero.professionalIntro} <span className="relative inline-block">{t.hero.professionalTitle}<span className="absolute bottom-2 left-0 w-full h-3 bg-emerald-100 -z-10 -rotate-1 rounded-full opacity-60"></span></span>
+                  </>
+                )}
               </h1>
             </div>
             
@@ -64,8 +74,8 @@ export default function Hero() {
             </div>
           </div>
 
-          <div className="relative animate-in fade-in zoom-in duration-1000 delay-200 lg:flex-1 order-2 lg:order-none">
-             <div className="relative w-64 h-64 md:w-[380px] md:h-[380px] mx-auto">
+          <div className="relative animate-in fade-in zoom-in duration-1000 delay-200 lg:flex-1 order-2 lg:order-none lg:pt-24">
+             <div className="relative w-64 h-64 md:w-[380px] md:h-[380px] mx-auto lg:ml-auto lg:mr-0">
                 <div className="absolute inset-0 bg-emerald-500 rounded-[3rem] rotate-6 opacity-10 animate-pulse transition-transform duration-1000" />
                 <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/20 to-blue-500/20 rounded-[3rem] -rotate-3" />
                 <div className="relative w-full h-full rounded-[3.5rem] bg-gray-50 overflow-hidden border-8 border-white shadow-2xl shadow-gray-200/50">

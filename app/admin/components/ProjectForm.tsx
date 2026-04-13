@@ -189,7 +189,7 @@ export default function ProjectForm({ initialData, onClose, onSuccess }: Project
              <div className="space-y-2">
                <label className="text-sm font-bold text-gray-400 uppercase tracking-widest pl-1">Live Demo URL</label>
                <input
-                 type="url"
+                 type="text"
                  value={formData.live_url}
                  onChange={(e) => setFormData({ ...formData, live_url: e.target.value })}
                  className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500 text-gray-900 font-medium transition-all"
@@ -199,7 +199,7 @@ export default function ProjectForm({ initialData, onClose, onSuccess }: Project
              <div className="space-y-2">
                <label className="text-sm font-bold text-gray-400 uppercase tracking-widest pl-1">GitHub Repo URL</label>
                <input
-                 type="url"
+                 type="text"
                  value={formData.github_url}
                  onChange={(e) => setFormData({ ...formData, github_url: e.target.value })}
                  className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500 text-gray-900 font-medium transition-all"

@@ -55,6 +55,10 @@ export default function AdminDashboard() {
   const [proposals, setProposals] = useState<Proposal[]>([])
   const [contacts, setContacts] = useState<ContactMessage[]>([])
   const [status, setStatus] = useState({ type: '', message: '' })
+  const [portalSettings, setPortalSettings] = useState({
+    title: 'Admin Portal',
+    subtitle: 'Premium Identity v2.0'
+  })
   const router = useRouter()
 
   useEffect(() => {
@@ -89,10 +93,22 @@ export default function AdminDashboard() {
       setContacts(data)
     })
 
+    // Branding Listener
+    const unsubBranding = onSnapshot(doc(db, 'settings', 'main'), (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.data()
+        setPortalSettings({
+          title: data.portal_title || 'Admin Portal',
+          subtitle: data.portal_subtitle || 'Premium Identity v2.0'
+        })
+      }
+    })
+
     return () => {
       unsubProjects()
       unsubProposals()
       unsubContacts()
+      unsubBranding()
     }
   }, [user, authLoading])
 
@@ -183,9 +199,9 @@ export default function AdminDashboard() {
                 className="object-cover p-1.5"
                />
              </div>
-             Admin Portal
+             {portalSettings.title}
           </div>
-          <p className="text-[10px] text-emerald-600 font-black tracking-[0.2em] uppercase opacity-40 italic mt-3 pl-1">Premium Identity v2.0</p>
+          <p className="text-[10px] text-emerald-600 font-black tracking-[0.2em] uppercase opacity-40 italic mt-3 pl-1">{portalSettings.subtitle}</p>
         </div>
 
         <nav className="space-y-3 flex-1">

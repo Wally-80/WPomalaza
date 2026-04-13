@@ -5,7 +5,7 @@ import {
   User, Mail, Phone, Calendar, Clock, 
   MessageSquare, FileText, ChevronRight, 
   Search, Filter, ArrowUpRight, CheckCircle2,
-  Inbox, Briefcase, Building2
+  Inbox, Briefcase, Building2, MapPin, MoreVertical
 } from 'lucide-react'
 import { Proposal } from '@/lib/firebase/proposals'
 
@@ -40,6 +40,15 @@ interface ClientProfile {
   events: TimelineEvent[]
 }
 
+const AVATAR_COLORS = [
+  'bg-emerald-500',
+  'bg-blue-500',
+  'bg-indigo-500',
+  'bg-violet-500',
+  'bg-orange-500',
+  'bg-teal-500'
+]
+
 export default function ClientHistory({ proposals, inquiries }: ClientHistoryProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedEmail, setSelectedEmail] = useState<string | null>(null)
@@ -64,7 +73,7 @@ export default function ClientHistory({ proposals, inquiries }: ClientHistoryPro
       client.events.push({
         id: inq.id,
         type: 'inquiry',
-        title: 'New Inquiry Received',
+        title: 'Initial Inquiry',
         description: inq.message,
         date: inq.timestamp?.toDate() || new Date()
       })
@@ -86,14 +95,13 @@ export default function ClientHistory({ proposals, inquiries }: ClientHistoryPro
         })
       }
       const client = map.get(email)!
-      // Update company if found in proposal
       if (prop.companyName) client.company = prop.companyName
       
       client.events.push({
         id: prop.id!,
         type: 'proposal_created',
-        title: 'Project Proposal Generated',
-        description: `Proposal for ${prop.companyName} with ${prop.packages.length} packages.`,
+        title: 'Proposal Generated',
+        description: `Scope: ${prop.packages[0]?.name || 'Custom Project'}`,
         date: prop.createdAt?.toDate() || new Date(),
         metadata: { status: prop.status }
       })
@@ -102,8 +110,8 @@ export default function ClientHistory({ proposals, inquiries }: ClientHistoryPro
         client.events.push({
           id: `${prop.id}-accepted`,
           type: 'proposal_accepted',
-          title: 'Proposal Officially Accepted',
-          description: `Contract signed and project authorized.`,
+          title: 'Contract Authorized',
+          description: `Terms accepted and signatures finalized.`,
           date: prop.acceptedAt.toDate(),
         })
       }
@@ -114,7 +122,6 @@ export default function ClientHistory({ proposals, inquiries }: ClientHistoryPro
       }
     })
 
-    // Sort events for each client
     map.forEach(client => {
       client.events.sort((a, b) => b.date.getTime() - a.date.getTime())
     })
@@ -130,139 +137,159 @@ export default function ClientHistory({ proposals, inquiries }: ClientHistoryPro
 
   const selectedClient = selectedEmail ? clients.find(c => c.email === selectedEmail) : null
 
+  const getAvatarColor = (name: string) => {
+    const index = name.length % AVATAR_COLORS.length
+    return AVATAR_COLORS[index]
+  }
+
   return (
-    <div className="flex flex-col xl:flex-row gap-10 h-[calc(100vh-200px)] animate-in fade-in duration-500">
+    <div className="flex flex-col xl:flex-row gap-8 h-[calc(100vh-180px)] animate-in fade-in duration-500">
       
-      {/* Client List Section */}
-      <div className="w-full xl:w-[450px] flex flex-col bg-white rounded-[3.5rem] border border-gray-100 shadow-sm overflow-hidden">
-        <div className="p-8 border-b border-gray-50 flex flex-col gap-6 bg-gray-50/30">
-           <div>
-             <h2 className="text-3xl font-black text-gray-900 tracking-tight">Client Hub</h2>
-             <p className="text-gray-400 font-medium text-sm">Unified profile and relationship tracking</p>
+      {/* Client List Sidebar */}
+      <div className="w-full xl:w-[400px] flex flex-col bg-white rounded-[2.5rem] border border-gray-100 shadow-xl shadow-gray-200/20 overflow-hidden">
+        <div className="p-8 border-b border-gray-50 flex flex-col gap-6">
+           <div className="flex items-center justify-between">
+             <div>
+               <h2 className="text-2xl font-black text-gray-900 tracking-tight">Client Hub</h2>
+               <p className="text-gray-400 font-bold text-xs uppercase tracking-widest mt-1">CRM Dashboard</p>
+             </div>
+             <div className="p-2 bg-gray-50 rounded-xl text-gray-400">
+                <Filter className="w-4 h-4" />
+             </div>
            </div>
            <div className="relative group">
-              <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-emerald-500 transition-colors" />
+              <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-emerald-500 transition-colors" />
               <input 
                 type="text"
-                placeholder="Search clients..."
-                className="w-full pl-14 pr-6 py-4 bg-white border border-gray-100 rounded-2xl outline-none font-bold text-sm shadow-sm transition-all focus:border-emerald-500"
+                placeholder="Search database..."
+                className="w-full pl-12 pr-6 py-3.5 bg-gray-50/50 border border-gray-100 rounded-2xl outline-none font-bold text-sm transition-all focus:border-emerald-500 focus:bg-white focus:shadow-lg focus:shadow-emerald-500/5"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
               />
            </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto p-4 custom-scrollbar space-y-2">
            {filteredClients.map((client) => (
              <button
               key={client.email}
               onClick={() => setSelectedEmail(client.email)}
-              className={`w-full p-6 mb-3 rounded-[2rem] flex items-center gap-5 transition-all group ${
+              className={`w-full p-5 rounded-2xl flex items-center gap-4 transition-all group relative overflow-hidden ${
                 selectedEmail === client.email 
-                  ? 'bg-emerald-500 text-white shadow-xl shadow-emerald-500/20' 
-                  : 'hover:bg-gray-50 text-gray-900 border border-transparent hover:border-gray-100'
+                  ? 'bg-emerald-50 border border-emerald-100' 
+                  : 'hover:bg-gray-50 border border-transparent'
               }`}
              >
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-black transition-colors ${
-                  selectedEmail === client.email ? 'bg-white/20 text-white' : 'bg-emerald-50 text-emerald-500'
-                }`}>
+                {selectedEmail === client.email && (
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500" />
+                )}
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-lg font-black text-white shadow-lg shrink-0 ${getAvatarColor(client.name)}`}>
                    {client.name.charAt(0)}
                 </div>
                 <div className="flex-1 text-left min-w-0">
-                   <h4 className="font-black text-lg tracking-tight truncate leading-tight mb-1">{client.name}</h4>
-                   <p className={`text-xs font-bold truncate tracking-tight uppercase opacity-60 ${selectedEmail === client.email ? 'text-white' : 'text-emerald-600'}`}>
+                   <h4 className={`font-black text-base tracking-tight truncate mb-0.5 ${selectedEmail === client.email ? 'text-emerald-900' : 'text-gray-900'}`}>
+                     {client.name}
+                   </h4>
+                   <p className="text-[10px] font-black uppercase tracking-wider text-gray-400 truncate">
                      {client.company}
                    </p>
                 </div>
-                <ChevronRight className={`w-5 h-5 opacity-20 ${selectedEmail === client.email ? 'opacity-50' : ''}`} />
+                <ChevronRight className={`w-4 h-4 transition-all ${selectedEmail === client.email ? 'text-emerald-500 translate-x-1' : 'text-gray-200'}`} />
              </button>
            ))}
 
            {filteredClients.length === 0 && (
-             <div className="p-20 text-center opacity-30">
-                <User className="w-16 h-16 mx-auto mb-4" />
-                <p className="font-black italic">No clients found</p>
+             <div className="p-12 text-center opacity-20">
+                <User className="w-12 h-12 mx-auto mb-3" />
+                <p className="font-black text-sm uppercase tracking-widest">Database Empty</p>
              </div>
            )}
         </div>
       </div>
 
-      {/* History Timeline Section */}
-      <div className="flex-1 bg-white rounded-[3.5rem] border border-gray-100 shadow-sm overflow-hidden flex flex-col">
+      {/* Detail Panel */}
+      <div className="flex-1 bg-white rounded-[2.5rem] border border-gray-100 shadow-xl shadow-gray-200/20 overflow-hidden flex flex-col">
          {selectedClient ? (
            <>
-              {/* Header Info */}
-              <div className="p-10 md:p-14 border-b border-gray-50 bg-gray-50/10 relative overflow-hidden">
-                 <div className="absolute top-0 right-0 p-10 opacity-5">
-                    <Building2 className="w-48 h-48" />
-                 </div>
-                 
-                 <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
-                    <div className="flex items-center gap-8">
-                       <div className="w-24 h-24 bg-emerald-500 text-white rounded-[2.5rem] flex items-center justify-center text-4xl font-black shadow-2xl shadow-emerald-500/20">
+              {/* Refined Profile Header */}
+              <div className="p-10 md:p-12 border-b border-gray-50">
+                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
+                    <div className="flex items-center gap-6">
+                       <div className={`w-20 h-20 rounded-3xl flex items-center justify-center text-3xl font-black text-white shadow-2xl ${getAvatarColor(selectedClient.name)}`}>
                           {selectedClient.name.charAt(0)}
                        </div>
                        <div>
-                          <h3 className="text-4xl font-black text-gray-900 tracking-tight leading-none mb-3">{selectedClient.name}</h3>
-                          <p className="text-xl text-emerald-600 font-black uppercase tracking-widest">{selectedClient.company}</p>
+                          <div className="flex items-center gap-3 mb-1">
+                            <h3 className="text-3xl font-black text-gray-900 tracking-tight">{selectedClient.name}</h3>
+                            <span className="px-3 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-black rounded-full uppercase tracking-widest border border-emerald-100">Active Client</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-gray-400 font-bold uppercase text-[11px] tracking-[0.2em]">
+                            <Building2 className="w-3.5 h-3.5" />
+                            {selectedClient.company}
+                          </div>
                        </div>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                       <div className="flex items-center gap-4 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
-                          <Mail className="w-5 h-5 text-gray-400" />
-                          <p className="text-sm font-bold text-gray-600">{selectedClient.email}</p>
+                    <div className="flex flex-wrap gap-3">
+                       <a href={`mailto:${selectedClient.email}`} className="flex items-center gap-3 bg-gray-50 px-5 py-3 rounded-xl border border-gray-100 hover:bg-white hover:border-emerald-500 hover:text-emerald-600 transition-all group">
+                          <Mail className="w-4 h-4 text-gray-400 group-hover:text-emerald-500" />
+                          <span className="text-xs font-black tracking-tight">{selectedClient.email}</span>
+                       </a>
+                       <div className="flex items-center gap-3 bg-gray-50 px-5 py-3 rounded-xl border border-gray-100">
+                          <Clock className="w-4 h-4 text-gray-400" />
+                          <span className="text-xs font-black tracking-tight">Last Activity: {selectedClient.lastActivity.toLocaleDateString()}</span>
                        </div>
-                       <div className="flex items-center gap-4 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
-                          <Clock className="w-5 h-5 text-gray-400" />
-                          <p className="text-sm font-bold text-gray-600">Active: {selectedClient.lastActivity.toLocaleDateString()}</p>
-                       </div>
+                       <button className="p-3 bg-gray-900 text-white rounded-xl hover:scale-105 active:scale-95 transition-all shadow-lg shadow-gray-900/10">
+                          <MoreVertical className="w-5 h-5" />
+                       </button>
                     </div>
                  </div>
               </div>
 
-              {/* Timeline */}
-              <div className="flex-1 overflow-y-auto p-10 md:p-14 custom-scrollbar bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:24px_24px]">
-                 <div className="relative pl-12 space-y-12">
-                    {/* Vertical Line */}
-                    <div className="absolute left-[23px] top-0 bottom-0 w-0.5 bg-gray-100" />
+              {/* Modern Timeline */}
+              <div className="flex-1 overflow-y-auto p-10 md:p-12 custom-scrollbar bg-gray-50/30">
+                 <div className="relative pl-8 space-y-10">
+                    {/* Simplified Timeline Line */}
+                    <div className="absolute left-[3px] top-2 bottom-8 w-0.5 bg-gray-200" />
 
                     {selectedClient.events.map((event, idx) => (
-                      <div key={event.id} className="relative animate-in slide-in-from-left-4 fade-in duration-500" style={{ animationDelay: `${idx * 100}ms` }}>
-                         {/* Dot */}
-                         <div className={`absolute left-[-51px] top-1.5 w-11 h-11 rounded-2xl border-4 border-white flex items-center justify-center shadow-md z-10 ${
-                           event.type === 'proposal_accepted' ? 'bg-emerald-500 text-white' :
-                           event.type === 'proposal_created' ? 'bg-blue-500 text-white' :
-                           'bg-gray-900 text-white'
-                         }`}>
-                            {event.type === 'inquiry' && <MessageSquare className="w-4 h-4" />}
-                            {event.type === 'proposal_created' && <FileText className="w-4 h-4" />}
-                            {event.type === 'proposal_accepted' && <CheckCircle2 className="w-4 h-4" />}
-                         </div>
+                      <div key={event.id} className="relative animate-in slide-in-from-bottom-4 fade-in duration-500" style={{ animationDelay: `${idx * 80}ms` }}>
+                         {/* More Professional Dot Indicator */}
+                         <div className={`absolute left-[-32px] top-4 w-4 h-4 rounded-full border-2 border-white ring-4 ring-transparent flex items-center justify-center shadow-lg z-10 ${
+                           event.type === 'proposal_accepted' ? 'bg-emerald-500 ring-emerald-50' :
+                           event.type === 'proposal_created' ? 'bg-blue-500 ring-blue-50' :
+                           'bg-gray-900 ring-gray-100'
+                         }`} />
 
-                         <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-gray-200/20 transition-all flex flex-col md:flex-row justify-between items-start gap-6 group">
-                            <div className="space-y-3">
-                               <div className="flex items-center gap-3">
-                                  <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">{event.date.toLocaleDateString()} @ {event.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                         <div className="bg-white p-7 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-gray-200/30 transition-all flex flex-col sm:flex-row justify-between items-start gap-4">
+                            <div className="space-y-3 flex-1 min-w-0">
+                               <div className="flex flex-wrap items-center gap-3">
+                                  <div className="flex items-center gap-1.5 px-2.5 py-1 bg-gray-100 rounded-lg text-gray-500">
+                                    <Calendar className="w-3 h-3" />
+                                    <span className="text-[10px] font-black uppercase">{event.date.toLocaleDateString()}</span>
+                                  </div>
+                                  <div className="flex items-center gap-1.5 px-2.5 py-1 bg-gray-100 rounded-lg text-gray-500">
+                                    <Clock className="w-3 h-3" />
+                                    <span className="text-[10px] font-black uppercase">{event.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                  </div>
                                   {event.metadata?.status === 'accepted' && (
-                                    <span className="px-3 py-1 bg-emerald-50 text-emerald-600 text-[8px] font-black rounded-full uppercase tracking-widest">Signed</span>
+                                    <span className="px-2.5 py-1 bg-emerald-500 text-white text-[9px] font-black rounded-lg uppercase tracking-widest shadow-lg shadow-emerald-500/20">Signature Verified</span>
                                   )}
                                </div>
-                               <h5 className="text-2xl font-black text-gray-900 tracking-tight group-hover:text-emerald-500 transition-colors">{event.title}</h5>
-                               <p className="text-gray-500 font-medium italic leading-relaxed pr-10">"{event.description}"</p>
+                               <div>
+                                  <h5 className="text-xl font-black text-gray-900 tracking-tight leading-tight mb-1">{event.title}</h5>
+                                  <p className="text-gray-500 text-sm font-medium leading-relaxed italic line-clamp-2 md:line-clamp-none pr-4">
+                                    "{event.description}"
+                                  </p>
+                               </div>
                             </div>
                             
                             {event.type !== 'inquiry' && (
                               <button 
-                                className="px-6 py-3 bg-gray-50 text-gray-400 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-gray-900 hover:text-white transition-all flex items-center gap-2 whitespace-nowrap active:scale-95"
-                                onClick={() => {
-                                  if (event.type.includes('proposal')) {
-                                     // Logic to view proposal could go here
-                                  }
-                                }}
+                                className="px-5 py-3 bg-gray-900 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-500 transition-all flex items-center gap-2 whitespace-nowrap active:scale-95 shadow-lg shadow-gray-900/10 shrink-0"
                               >
                                 View Entry
-                                <ArrowUpRight className="w-3 h-3" />
+                                <ArrowUpRight className="w-3 h-3 text-emerald-400" />
                               </button>
                             )}
                          </div>
@@ -272,12 +299,14 @@ export default function ClientHistory({ proposals, inquiries }: ClientHistoryPro
               </div>
            </>
          ) : (
-           <div className="flex-1 flex flex-col items-center justify-center p-20 opacity-30 text-center">
-              <div className="w-32 h-32 bg-gray-50 rounded-[4rem] flex items-center justify-center mb-10">
-                 <Inbox className="w-12 h-12 text-gray-300" />
+           <div className="flex-1 flex flex-col items-center justify-center p-20 text-center">
+              <div className="w-24 h-24 bg-gray-50 rounded-3xl flex items-center justify-center mb-6 border border-gray-100">
+                 <Search className="w-8 h-8 text-gray-200" />
               </div>
-              <h3 className="text-3xl font-black text-gray-900 mb-2">No Profiles Selected</h3>
-              <p className="text-xl font-medium max-w-sm italic">"Select a client from the directory to review their professional history and transaction timeline."</p>
+              <h3 className="text-2xl font-black text-gray-900 mb-2">Select a Profile</h3>
+              <p className="text-gray-400 font-medium max-w-xs text-sm leading-relaxed">
+                Choose a client from the directory to review their interaction history and project timeline.
+              </p>
            </div>
          )}
       </div>

@@ -8,7 +8,7 @@ import {
   Save, User, Globe, Github, Linkedin, Twitter, 
   Image as ImageIcon, Loader2, CheckCircle2, AlertCircle,
   Plus, FileText, Trash2, Eye, EyeOff, Instagram, Youtube, Facebook, 
-  Mail, MessageCircle, Share2, ExternalLink
+  Mail, MessageCircle, Share2, ExternalLink, LayoutGrid, LayoutDashboard
 } from 'lucide-react'
 
 interface SocialLink {
@@ -38,7 +38,11 @@ export default function ProfileSettings() {
     title: 'React, Next.js & Node.js Developer',
     bio: '',
     profile_image_url: '',
-    socialLinks: [] as SocialLink[]
+    socialLinks: [] as SocialLink[],
+    portal_title: 'Admin Portal',
+    portal_subtitle: 'Premium Identity v2.0',
+    hero_welcome: '',
+    hero_tagline: ''
   })
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(true)
@@ -251,6 +255,69 @@ export default function ProfileSettings() {
            />
         </div>
 
+        {/* Admin Portal Branding */}
+        <div className="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+           <div className="flex items-center gap-3 mb-2">
+             <LayoutGrid className="w-6 h-6 text-emerald-500" />
+             <h3 className="text-xl font-extrabold text-gray-900">System Branding</h3>
+           </div>
+           
+           <div className="grid md:grid-cols-2 gap-8">
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] pl-1">Portal Headline</label>
+                <input 
+                  type="text" 
+                  value={formData.portal_title}
+                  onChange={(e) => setFormData({...formData, portal_title: e.target.value})}
+                  className="w-full p-5 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500 text-gray-900 font-black transition-all"
+                  placeholder="e.g. Admin Portal"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] pl-1">Version / Sub-headline</label>
+                <input 
+                  type="text" 
+                  value={formData.portal_subtitle}
+                  onChange={(e) => setFormData({...formData, portal_subtitle: e.target.value})}
+                  className="w-full p-5 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500 text-emerald-600 font-extrabold transition-all"
+                  placeholder="e.g. Premium Identity v2.0"
+                />
+              </div>
+           </div>
+        </div>
+
+        {/* Home Hero Content */}
+        <div className="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+           <div className="flex items-center gap-3 mb-2">
+             <LayoutDashboard className="w-6 h-6 text-emerald-500" />
+             <h3 className="text-xl font-extrabold text-gray-900">Home Hero Content</h3>
+           </div>
+           
+           <div className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] pl-1">Hero Greeting Badge</label>
+                <input 
+                  type="text" 
+                  value={formData.hero_welcome}
+                  onChange={(e) => setFormData({...formData, hero_welcome: e.target.value})}
+                  className="w-full p-5 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500 text-gray-900 font-black transition-all"
+                  placeholder="e.g. Welcome to my world (Leave empty for default)"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] pl-1">Professional Headline / Description</label>
+                <textarea 
+                  value={formData.hero_tagline}
+                  onChange={(e) => setFormData({...formData, hero_tagline: e.target.value})}
+                  rows={3}
+                  className="w-full p-5 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500 text-gray-900 font-bold leading-relaxed transition-all"
+                  placeholder="e.g. I'm Walter Pomalaza, a professional Innovator Designer (Leave empty for default)"
+                />
+                <p className="text-[10px] text-gray-400 italic pl-1 font-medium">This text overrides the main introduction on your homepage.</p>
+              </div>
+           </div>
+        </div>
+
         {/* Dynamic Social Connectivity */}
         <div className="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm space-y-8">
            <div className="flex items-center justify-between gap-3 mb-2">
@@ -286,10 +353,10 @@ export default function ProfileSettings() {
                       <select
                         value={social.icon}
                         onChange={(e) => updateSocial(social.id, { icon: e.target.value, name: e.target.value })}
-                        className="appearance-none bg-emerald-500 text-white w-12 h-12 rounded-2xl flex items-center justify-center cursor-pointer hover:bg-emerald-600 transition-all text-center pl-3.5"
+                        className="appearance-none bg-emerald-500 text-transparent w-12 h-12 rounded-2xl flex items-center justify-center cursor-pointer hover:bg-emerald-600 transition-all text-center focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                       >
                         {AVAILABLE_ICONS.map(i => (
-                          <option key={i.name} value={i.name}>{i.name}</option>
+                          <option key={i.name} value={i.name} className="text-gray-900">{i.name}</option>
                         ))}
                       </select>
                       <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-white">
@@ -306,11 +373,11 @@ export default function ProfileSettings() {
                         placeholder="Platform Name (e.g. My Portfolio)"
                       />
                       <input
-                        type="url"
+                        type="text"
                         value={social.url}
                         onChange={(e) => updateSocial(social.id, { url: e.target.value })}
                         className="w-full bg-transparent border-none p-0 text-xs font-medium text-emerald-600 focus:ring-0 placeholder:text-emerald-200"
-                        placeholder="https://yourlink.com"
+                        placeholder="https://yourlink.com or email@example.com"
                       />
                     </div>
                   </div>
