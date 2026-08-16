@@ -9,7 +9,7 @@ Portafolio moderno y ligero construido con Next.js, TypeScript, Tailwind CSS y S
 - ⚡ **Next.js 16** - Framework React moderno con App Router
 - 🎯 **TypeScript** - Tipado estático para mayor seguridad
 - 💅 **Tailwind CSS** - Estilos modernos y personalizables
-- 🗄️ **Firebase** - Base de datos PostgreSQL y almacenamiento de imágenes
+- 🗄️ **Firebase** - Autenticación, Firestore y almacenamiento de imágenes
 - 📱 **SEO Optimizado** - Metadatos configurados para mejor posicionamiento
 
 ## 📁 Estructura del Proyecto
