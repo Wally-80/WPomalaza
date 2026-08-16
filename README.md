@@ -175,7 +175,7 @@ También funciona en Netlify, Railway, DigitalOcean App Platform, etc.
 
 - [Repositorio GitHub](https://github.com/Wally-80/WPomalaza)
 - [Next.js Documentation](https://nextjs.org/docs)
-- [Supabase Documentation](https://supabase.com/docs)
+- [Firebase Documentation](https://firebase.google.com/docs)
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 
 ---
